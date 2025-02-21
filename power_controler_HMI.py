@@ -6,6 +6,8 @@ from pymodbus.exceptions import ModbusException
 import threading
 import time
 
+time_between_frame = 0.02
+
 class COMConnectorApp:
     def __init__(self, root):
         self.root = root
@@ -79,9 +81,9 @@ class COMConnectorApp:
     def poll_data(self):
         while self.polling:
             try:
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 self.read_input_registers()
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 self.read_holding_registers()
             except ModbusException as e:
                 self.status_label.config(text=f"Modbus Exception: {e}")
@@ -90,9 +92,9 @@ class COMConnectorApp:
 
     def read_input_registers(self):
         try:
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             dc_response = self.modbus_client.read_input_registers(4, 1, unit=1)
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             radiator_response = self.modbus_client.read_input_registers(10, 1, unit=1)
 
             if not dc_response.isError():
@@ -115,29 +117,29 @@ class COMConnectorApp:
 
     def read_holding_registers(self):
         try:
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             initial_frequency_response = self.modbus_client.read_holding_registers(1000, 1, unit=1)
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             max_dc_voltage_response = self.modbus_client.read_holding_registers(1001, 1, unit=1)
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             min_dc_voltage_response = self.modbus_client.read_holding_registers(1002, 1, unit=1)
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             max_ac_voltage_motor1_response = self.modbus_client.read_holding_registers(1003, 1, unit=1)
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             max_ac_voltage_motor2_response = self.modbus_client.read_holding_registers(1004, 1, unit=1)
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             ac_current_motor1_response = self.modbus_client.read_holding_registers(1005, 1, unit=1)
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             ac_current_motor2_response = self.modbus_client.read_holding_registers(1006, 1, unit=1)
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             max_mcu_temperature_response = self.modbus_client.read_holding_registers(1007, 1, unit=1)
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             max_radiator_temperature_response = self.modbus_client.read_holding_registers(1008, 1, unit=1)
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             sweep_min_frequency_response = self.modbus_client.read_holding_registers(1009, 1, unit=1)
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             sweep_max_frequency_response = self.modbus_client.read_holding_registers(1010, 1, unit=1)
-            time.sleep(0.25)
+            time.sleep(time_between_frame)
             sweep_stabilization_response = self.modbus_client.read_holding_registers(1011, 1, unit=1)
 
             if not initial_frequency_response.isError():
@@ -362,7 +364,7 @@ class COMConnectorApp:
             try:
                 value = float(self.initial_frequency_entry.get())
                 value_to_write = int(value * 10)
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(1000, value_to_write, unit=1)
                 if not response.isError():
                     self.status_label.config(text=f"Initial Frequency (1000) written successfully")
@@ -382,7 +384,7 @@ class COMConnectorApp:
             try:
                 value = float(self.max_dc_voltage_entry.get())
                 value_to_write = int(value * 10)
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(1001, value_to_write, unit=1)
                 if not response.isError():
                     self.status_label.config(text=f"Max DC Bus Voltage (1001) written successfully")
@@ -402,7 +404,7 @@ class COMConnectorApp:
             try:
                 value = float(self.min_dc_voltage_entry.get())
                 value_to_write = int(value * 10)
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(1002, value_to_write, unit=1)
                 if not response.isError():
                     self.status_label.config(text=f"Min DC Bus Voltage (1002) written successfully")
@@ -422,7 +424,7 @@ class COMConnectorApp:
             try:
                 value = float(self.max_ac_voltage_motor1_entry.get())
                 value_to_write = int(value * 10)
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(1003, value_to_write, unit=1)
                 if not response.isError():
                     self.status_label.config(text=f"Max AC Voltage Motor 1 (1003) written successfully")
@@ -442,7 +444,7 @@ class COMConnectorApp:
             try:
                 value = float(self.max_ac_voltage_motor2_entry.get())
                 value_to_write = int(value * 10)
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(1004, value_to_write, unit=1)
                 if not response.isError():
                     self.status_label.config(text=f"Max AC Voltage Motor 2 (1004) written successfully")
@@ -462,7 +464,7 @@ class COMConnectorApp:
             try:
                 value = float(self.ac_current_motor1_entry.get())
                 value_to_write = int(value * 10)
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(1005, value_to_write, unit=1)
                 if not response.isError():
                     self.status_label.config(text=f"AC Current Motor 1 (1005) written successfully")
@@ -482,7 +484,7 @@ class COMConnectorApp:
             try:
                 value = float(self.ac_current_motor2_entry.get())
                 value_to_write = int(value * 10)
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(1006, value_to_write, unit=1)
                 if not response.isError():
                     self.status_label.config(text=f"AC Current Motor 2 (1006) written successfully")
@@ -502,7 +504,7 @@ class COMConnectorApp:
             try:
                 value = float(self.max_mcu_temperature_entry.get())
                 value_to_write = int(value * 10)
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(1007, value_to_write, unit=1)
                 if not response.isError():
                     self.status_label.config(text=f"Max MCU Temperature (1007) written successfully")
@@ -522,7 +524,7 @@ class COMConnectorApp:
             try:
                 value = float(self.max_radiator_temperature_entry.get())
                 value_to_write = int(value * 10)
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(1008, value_to_write, unit=1)
                 if not response.isError():
                     self.status_label.config(text=f"Max Radiator Temperature (1008) written successfully")
@@ -542,7 +544,7 @@ class COMConnectorApp:
             try:
                 value = float(self.sweep_min_frequency_entry.get())
                 value_to_write = int(value * 10)
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(1009, value_to_write, unit=1)
                 if not response.isError():
                     self.status_label.config(text=f"Sweep Min Frequency (1009) written successfully")
@@ -562,7 +564,7 @@ class COMConnectorApp:
             try:
                 value = float(self.sweep_max_frequency_entry.get())
                 value_to_write = int(value * 10)
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(1010, value_to_write, unit=1)
                 if not response.isError():
                     self.status_label.config(text=f"Sweep Max Frequency (1010) written successfully")
@@ -582,7 +584,7 @@ class COMConnectorApp:
             try:
                 value = float(self.sweep_stabilization_entry.get())
                 value_to_write = int(value * 10)
-                time.sleep(0.25)
+                time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(1011, value_to_write, unit=1)
                 if not response.isError():
                     self.status_label.config(text=f"Sweep Stabilization (1011) written successfully")
