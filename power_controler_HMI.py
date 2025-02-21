@@ -102,7 +102,7 @@ class COMConnectorApp:
                 raw_radiator_value = radiator_response.registers[0]/10
                 self.radiator_temp_label.config(text=f"Radiator Temperature: {raw_radiator_value} °C")
             else:
-                self.radiator_temp_label.config(text=f"Error reading Radiator Temperature: {radiator_response}")
+                self.radiator_temp_label.config(text=f"Error reading Radiator Temperature")
 
             time.sleep(time_between_frame)
             live_frequency_motor1_response = self.modbus_client.read_input_registers(3, 1, unit=1)
@@ -111,7 +111,7 @@ class COMConnectorApp:
                 live_frequency_motor1 = raw_live_frequency_motor1_value / 10
                 self.live_frequency_motor1_label.config(text=f"Live Frequency Motor 1: {live_frequency_motor1} Hz")
             else:
-                self.live_frequency_motor1_label.config(text=f"Error reading Live Frequency Motor 1: {live_frequency_motor1_response}")
+                self.live_frequency_motor1_label.config(text=f"Error reading Live Frequency Motor 1")
 
             time.sleep(time_between_frame)
             live_frequency_motor2_response = self.modbus_client.read_input_registers(18, 1, unit=1)
@@ -120,7 +120,7 @@ class COMConnectorApp:
                 live_frequency_motor2 = raw_live_frequency_motor2_value / 10
                 self.live_frequency_motor2_label.config(text=f"Live Frequency Motor 2: {live_frequency_motor2} Hz")
             else:
-                self.live_frequency_motor2_label.config(text=f"Error reading Live Frequency Motor 2: {live_frequency_motor2_response}")
+                self.live_frequency_motor2_label.config(text=f"Error reading Live Frequency Motor 2")
 
             time.sleep(time_between_frame)
             dc_bus_voltage_response = self.modbus_client.read_input_registers(4, 1, unit=1)
@@ -129,7 +129,7 @@ class COMConnectorApp:
                 dc_bus_voltage = raw_dc_bus_voltage_value / 10
                 self.dc_bus_voltage_label.config(text=f"DC Bus Voltage: {dc_bus_voltage} V")
             else:
-                self.dc_bus_voltage_label.config(text=f"Error reading DC Bus Voltage: {dc_bus_voltage_response}")
+                self.dc_bus_voltage_label.config(text=f"Error reading DC Bus Voltage")
 
             time.sleep(time_between_frame)
             ac_voltage_motor1_response = self.modbus_client.read_input_registers(5, 1, unit=1)
@@ -138,7 +138,7 @@ class COMConnectorApp:
                 ac_voltage_motor1 = raw_ac_voltage_motor1_value / 10
                 self.ac_voltage_motor1_label.config(text=f"Voltage Motor 1 RMS: {ac_voltage_motor1} V")
             else:
-                self.ac_voltage_motor1_label.config(text=f"Error reading AC Voltage Motor 1: {ac_voltage_motor1_response}")
+                self.ac_voltage_motor1_label.config(text=f"Error reading AC Voltage Motor 1")
 
             time.sleep(time_between_frame)
             ac_voltage_motor2_response = self.modbus_client.read_input_registers(6, 1, unit=1)
@@ -147,7 +147,7 @@ class COMConnectorApp:
                 ac_voltage_motor2 = raw_ac_voltage_motor2_value / 10
                 self.ac_voltage_motor2_label.config(text=f"Voltage Motor 2 RMS: {ac_voltage_motor2} V")
             else:
-                self.ac_voltage_motor2_label.config(text=f"Error reading AC Voltage Motor 2: {ac_voltage_motor2_response}")
+                self.ac_voltage_motor2_label.config(text=f"Error reading AC Voltage Motor 2")
 
             time.sleep(time_between_frame)
             RMS_current_motor1_response = self.modbus_client.read_input_registers(7, 1, unit=1)
@@ -156,7 +156,7 @@ class COMConnectorApp:
                 ac_current_motor1 = raw_ac_current_motor1_value / 10
                 self.input_RMS_current_motor1_label.config(text=f"Current Motor 1 RMS: {ac_current_motor1} A")
             else:
-                self.input_RMS_current_motor1_label.config(text=f"Error reading AC Current Motor 1: {RMS_current_motor1_response}")
+                self.input_RMS_current_motor1_label.config(text=f"Error reading AC Current Motor 1")
 
             time.sleep(time_between_frame)
             RMS_current_motor2_response = self.modbus_client.read_input_registers(8, 1, unit=1)
@@ -165,7 +165,7 @@ class COMConnectorApp:
                 ac_current_motor2 = raw_ac_current_motor2_value / 10
                 self.input_RMS_current_motor2_label.config(text=f"Current Motor 2 RMS: {ac_current_motor2} A")
             else:
-                self.input_RMS_current_motor2_label.config(text=f"Error reading AC Current Motor 2: {RMS_current_motor2_response}")
+                self.input_RMS_current_motor2_label.config(text=f"Error reading AC Current Motor 2")
 
             time.sleep(time_between_frame)
             mcu_temperature_response = self.modbus_client.read_input_registers(9, 1, unit=1)
@@ -174,43 +174,43 @@ class COMConnectorApp:
                 mcu_temperature = raw_mcu_temperature_value / 10
                 self.mcu_temperature_label.config(text=f"MCU Temperature: {mcu_temperature} °C")
             else:
-                self.mcu_temperature_label.config(text=f"Error reading MCU Temperature: {mcu_temperature_response}")
+                self.mcu_temperature_label.config(text=f"Error reading MCU Temperature")
 
             time.sleep(time_between_frame)
             mcu_temperature_min_response = self.modbus_client.read_input_registers(17, 1, unit=1)
             if not mcu_temperature_min_response.isError():
                 raw_mcu_temperature_min_value = mcu_temperature_min_response.registers[0]
                 mcu_temperature_min = raw_mcu_temperature_min_value / 10
-                self.mcu_temperature_min_label.config(text=f"MCU Temperature Min (life): {mcu_temperature_min} °C")
+                self.mcu_temperature_min_label.config(text=f"MCU Temperature Min (live): {mcu_temperature_min} °C")
             else:
-                self.mcu_temperature_min_label.config(text=f"Error reading MCU Temperature Min (life): {mcu_temperature_min_response}")
+                self.mcu_temperature_min_label.config(text=f"Error reading MCU Temperature Min (live)")
 
             time.sleep(time_between_frame)
             mcu_temperature_max_response = self.modbus_client.read_input_registers(18, 1, unit=1)
             if not mcu_temperature_max_response.isError():
                 raw_mcu_temperature_max_value = mcu_temperature_max_response.registers[0]
                 mcu_temperature_max = raw_mcu_temperature_max_value / 10
-                self.mcu_temperature_max_label.config(text=f"MCU Temperature Max (life): {mcu_temperature_max} °C")
+                self.mcu_temperature_max_label.config(text=f"MCU Temperature Max (live): {mcu_temperature_max} °C")
             else:
-                self.mcu_temperature_max_label.config(text=f"Error reading MCU Temperature Max (life): {mcu_temperature_max_response}")
+                self.mcu_temperature_max_label.config(text=f"Error reading MCU Temperature Max (live)")
 
             time.sleep(time_between_frame)
             radiator_temperature_min_response = self.modbus_client.read_input_registers(19, 1, unit=1)
             if not radiator_temperature_min_response.isError():
                 raw_radiator_temperature_min_value = radiator_temperature_min_response.registers[0]
                 radiator_temperature_min = raw_radiator_temperature_min_value / 10
-                self.radiator_temperature_min_label.config(text=f"Radiator Temperature Min (life): {radiator_temperature_min} °C")
+                self.radiator_temperature_min_label.config(text=f"Radiator Temperature Min (live): {radiator_temperature_min} °C")
             else:
-                self.radiator_temperature_min_label.config(text=f"Error reading Radiator Temperature Min (life): {radiator_temperature_min_response}")
+                self.radiator_temperature_min_label.config(text=f"Error reading Radiator Temperature Min (live)")
 
             time.sleep(time_between_frame)
             radiator_temperature_max_response = self.modbus_client.read_input_registers(20, 1, unit=1)
             if not radiator_temperature_max_response.isError():
                 raw_radiator_temperature_max_value = radiator_temperature_max_response.registers[0]
                 radiator_temperature_max = raw_radiator_temperature_max_value / 10
-                self.radiator_temperature_max_label.config(text=f"Radiator Temperature Max (life): {radiator_temperature_max} °C")
+                self.radiator_temperature_max_label.config(text=f"Radiator Temperature Max (live): {radiator_temperature_max} °C")
             else:
-                self.radiator_temperature_max_label.config(text=f"Error reading Radiator Temperature Max (life): {radiator_temperature_max_response}")
+                self.radiator_temperature_max_label.config(text=f"Error reading Radiator Temperature Max (live)")
 
             time.sleep(time_between_frame)
             motor1_position_average_response = self.modbus_client.read_input_registers(11, 1, unit=1)
@@ -219,7 +219,7 @@ class COMConnectorApp:
                 motor1_position_average = raw_motor1_position_average_value / 10
                 self.motor1_position_average_label.config(text=f"Motor 1 Position Average: {motor1_position_average} mm")
             else:
-                self.motor1_position_average_label.config(text=f"Error reading Motor 1 Position Average: {motor1_position_average_response}")
+                self.motor1_position_average_label.config(text=f"Error reading Motor 1 Position Average")
 
             time.sleep(time_between_frame)
             motor1_position_max_response = self.modbus_client.read_input_registers(12, 1, unit=1)
@@ -228,7 +228,7 @@ class COMConnectorApp:
                 motor1_position_max = raw_motor1_position_max_value / 10
                 self.motor1_position_max_label.config(text=f"Motor 1 Position Max: {motor1_position_max} mm")
             else:
-                self.motor1_position_max_label.config(text=f"Error reading Motor 1 Position Max: {motor1_position_max_response}")
+                self.motor1_position_max_label.config(text=f"Error reading Motor 1 Position Max")
 
             time.sleep(time_between_frame)
             motor1_position_min_response = self.modbus_client.read_input_registers(13, 1, unit=1)
@@ -237,7 +237,7 @@ class COMConnectorApp:
                 motor1_position_min = raw_motor1_position_min_value / 10
                 self.motor1_position_min_label.config(text=f"Motor 1 Position Min: {motor1_position_min} mm")
             else:
-                self.motor1_position_min_label.config(text=f"Error reading Motor 1 Position Min: {motor1_position_min_response}")
+                self.motor1_position_min_label.config(text=f"Error reading Motor 1 Position Min")
 
             time.sleep(time_between_frame)
             motor2_position_average_response = self.modbus_client.read_input_registers(14, 1, unit=1)
@@ -246,7 +246,7 @@ class COMConnectorApp:
                 motor2_position_average = raw_motor2_position_average_value / 10
                 self.motor2_position_average_label.config(text=f"Motor 2 Position Average: {motor2_position_average} mm")
             else:
-                self.motor2_position_average_label.config(text=f"Error reading Motor 2 Position Average: {motor2_position_average_response}")
+                self.motor2_position_average_label.config(text=f"Error reading Motor 2 Position Average")
 
             time.sleep(time_between_frame)
             motor2_position_max_response = self.modbus_client.read_input_registers(15, 1, unit=1)
@@ -255,7 +255,7 @@ class COMConnectorApp:
                 motor2_position_max = raw_motor2_position_max_value / 10
                 self.motor2_position_max_label.config(text=f"Motor 2 Position Max: {motor2_position_max} mm")
             else:
-                self.motor2_position_max_label.config(text=f"Error reading Motor 2 Position Max: {motor2_position_max_response}")
+                self.motor2_position_max_label.config(text=f"Error reading Motor 2 Position Max")
 
             time.sleep(time_between_frame)
             motor2_position_min_response = self.modbus_client.read_input_registers(16, 1, unit=1)
@@ -264,7 +264,7 @@ class COMConnectorApp:
                 motor2_position_min = raw_motor2_position_min_value / 10
                 self.motor2_position_min_label.config(text=f"Motor 2 Position Min: {motor2_position_min} mm")
             else:
-                self.motor2_position_min_label.config(text=f"Error reading Motor 2 Position Min: {motor2_position_min_response}")
+                self.motor2_position_min_label.config(text=f"Error reading Motor 2 Position Min")
 
             time.sleep(time_between_frame)
             network_frequency_response = self.modbus_client.read_input_registers(20, 1, unit=1)
@@ -273,7 +273,7 @@ class COMConnectorApp:
                 network_frequency = raw_network_frequency_value / 10
                 self.network_frequency_label.config(text=f"Network Frequency: {network_frequency} Hz")
             else:
-                self.network_frequency_label.config(text=f"Error reading Network Frequency: {network_frequency_response}")
+                self.network_frequency_label.config(text=f"Error reading Network Frequency")
 
             time.sleep(time_between_frame)
             apparent_power_response = self.modbus_client.read_input_registers(21, 1, unit=1)
@@ -282,7 +282,7 @@ class COMConnectorApp:
                 apparent_power = raw_apparent_power_value / 10
                 self.apparent_power_label.config(text=f"Apparent Power: {apparent_power} VA")
             else:
-                self.apparent_power_label.config(text=f"Error reading Apparent Power: {apparent_power_response}")
+                self.apparent_power_label.config(text=f"Error reading Apparent Power")
 
             time.sleep(time_between_frame)
             active_power_response = self.modbus_client.read_input_registers(22, 1, unit=1)
@@ -291,7 +291,7 @@ class COMConnectorApp:
                 active_power = raw_active_power_value / 10
                 self.active_power_label.config(text=f"Active Power: {active_power} W")
             else:
-                self.active_power_label.config(text=f"Error reading Active Power: {active_power_response}")
+                self.active_power_label.config(text=f"Error reading Active Power")
 
             time.sleep(time_between_frame)
             dc_resistance_motor1_response = self.modbus_client.read_input_registers(26, 1, unit=1)
@@ -300,7 +300,7 @@ class COMConnectorApp:
                 dc_resistance_motor1 = raw_dc_resistance_motor1_value / 100
                 self.dc_resistance_motor1_label.config(text=f"DC Resistance Motor 1: {dc_resistance_motor1} mOhm")
             else:
-                self.dc_resistance_motor1_label.config(text=f"Error reading DC Resistance Motor 1: {dc_resistance_motor1_response}")
+                self.dc_resistance_motor1_label.config(text=f"Error reading DC Resistance Motor 1")
 
             time.sleep(time_between_frame)
             dc_resistance_motor2_response = self.modbus_client.read_input_registers(27, 1, unit=1)
@@ -309,7 +309,7 @@ class COMConnectorApp:
                 dc_resistance_motor2 = raw_dc_resistance_motor2_value / 100
                 self.dc_resistance_motor2_label.config(text=f"DC Resistance Motor 2: {dc_resistance_motor2} mOhm")
             else:
-                self.dc_resistance_motor2_label.config(text=f"Error reading DC Resistance Motor 2: {dc_resistance_motor2_response}")
+                self.dc_resistance_motor2_label.config(text=f"Error reading DC Resistance Motor 2")
 
             time.sleep(time_between_frame)
             sweep_resonance_frequency_response = self.modbus_client.read_input_registers(28, 1, unit=1)
@@ -318,7 +318,7 @@ class COMConnectorApp:
                 sweep_resonance_frequency = raw_sweep_resonance_frequency_value / 10
                 self.sweep_resonance_frequency_label.config(text=f"Sweep Resonance Frequency: {sweep_resonance_frequency} Hz")
             else:
-                self.sweep_resonance_frequency_label.config(text=f"Error reading Sweep Resonance Frequency: {sweep_resonance_frequency_response}")
+                self.sweep_resonance_frequency_label.config(text=f"Error reading Sweep Resonance Frequency")
 
         except ModbusException as e:
             self.status_label.config(text=f"Modbus Exception: {e}")
@@ -357,84 +357,84 @@ class COMConnectorApp:
                 initial_frequency = raw_initial_frequency_value / 10
                 self.initial_frequency_label.config(text=f"Initial Frequency: {initial_frequency} Hz")
             else:
-                self.initial_frequency_label.config(text=f"Error reading Initial Frequency: {initial_frequency_response}")
+                self.initial_frequency_label.config(text=f"Error reading Initial Frequency")
 
             if not max_dc_voltage_response.isError():
                 raw_max_dc_voltage_value = max_dc_voltage_response.registers[0]
                 max_dc_voltage = raw_max_dc_voltage_value / 10
                 self.max_dc_voltage_label.config(text=f"Max DC Bus Voltage: {max_dc_voltage} V")
             else:
-                self.max_dc_voltage_label.config(text=f"Error reading Max DC Bus Voltage: {max_dc_voltage_response}")
+                self.max_dc_voltage_label.config(text=f"Error reading Max DC Bus Voltage")
 
             if not min_dc_voltage_response.isError():
                 raw_min_dc_voltage_value = min_dc_voltage_response.registers[0]
                 min_dc_voltage = raw_min_dc_voltage_value / 10
                 self.min_dc_voltage_label.config(text=f"Min DC Bus Voltage: {min_dc_voltage} V")
             else:
-                self.min_dc_voltage_label.config(text=f"Error reading Min DC Bus Voltage: {min_dc_voltage_response}")
+                self.min_dc_voltage_label.config(text=f"Error reading Min DC Bus Voltage")
 
             if not max_ac_voltage_motor1_response.isError():
                 raw_max_ac_voltage_motor1_value = max_ac_voltage_motor1_response.registers[0]
                 max_ac_voltage_motor1 = raw_max_ac_voltage_motor1_value / 10
                 self.max_ac_voltage_motor1_label.config(text=f"Max AC Voltage Motor 1: {max_ac_voltage_motor1} V")
             else:
-                self.max_ac_voltage_motor1_label.config(text=f"Error reading Max AC Voltage Motor 1: {max_ac_voltage_motor1_response}")
+                self.max_ac_voltage_motor1_label.config(text=f"Error reading Max AC Voltage Motor 1")
 
             if not max_ac_voltage_motor2_response.isError():
                 raw_max_ac_voltage_motor2_value = max_ac_voltage_motor2_response.registers[0]
                 max_ac_voltage_motor2 = raw_max_ac_voltage_motor2_value / 10
                 self.max_ac_voltage_motor2_label.config(text=f"Max AC Voltage Motor 2: {max_ac_voltage_motor2} V")
             else:
-                self.max_ac_voltage_motor2_label.config(text=f"Error reading Max AC Voltage Motor 2: {max_ac_voltage_motor2_response}")
+                self.max_ac_voltage_motor2_label.config(text=f"Error reading Max AC Voltage Motor 2")
 
             if not ac_current_motor1_response.isError():
                 raw_ac_current_motor1_value = ac_current_motor1_response.registers[0]
                 ac_current_motor1 = raw_ac_current_motor1_value / 10
                 self.ac_current_motor1_label.config(text=f"AC Current Motor 1: {ac_current_motor1} A")
             else:
-                self.ac_current_motor1_label.config(text=f"Error reading AC Current Motor 1: {ac_current_motor1_response}")
+                self.ac_current_motor1_label.config(text=f"Error reading AC Current Motor")
 
             if not ac_current_motor2_response.isError():
                 raw_ac_current_motor2_value = ac_current_motor2_response.registers[0]
                 ac_current_motor2 = raw_ac_current_motor2_value / 10
                 self.ac_current_motor2_label.config(text=f"AC Current Motor 2: {ac_current_motor2} A")
             else:
-                self.ac_current_motor2_label.config(text=f"Error reading AC Current Motor 2: {ac_current_motor2_response}")
+                self.ac_current_motor2_label.config(text=f"Error reading AC Current Motor 2")
 
             if not max_mcu_temperature_response.isError():
                 raw_max_mcu_temperature_value = max_mcu_temperature_response.registers[0]
                 max_mcu_temperature = raw_max_mcu_temperature_value / 10
                 self.max_mcu_temperature_label.config(text=f"Max MCU Temperature: {max_mcu_temperature} °C")
             else:
-                self.max_mcu_temperature_label.config(text=f"Error reading Max MCU Temperature: {max_mcu_temperature_response}")
+                self.max_mcu_temperature_label.config(text=f"Error reading Max MCU Temperature")
 
             if not max_radiator_temperature_response.isError():
                 raw_max_radiator_temperature_value = max_radiator_temperature_response.registers[0]
                 max_radiator_temperature = raw_max_radiator_temperature_value / 10
                 self.max_radiator_temperature_label.config(text=f"Max Radiator Temperature: {max_radiator_temperature} °C")
             else:
-                self.max_radiator_temperature_label.config(text=f"Error reading Max Radiator Temperature: {max_radiator_temperature_response}")
+                self.max_radiator_temperature_label.config(text=f"Error reading Max Radiator Temperature")
 
             if not sweep_min_frequency_response.isError():
                 raw_sweep_min_frequency_value = sweep_min_frequency_response.registers[0]
                 sweep_min_frequency = raw_sweep_min_frequency_value / 10
                 self.sweep_min_frequency_label.config(text=f"Sweep Min Frequency: {sweep_min_frequency} Hz")
             else:
-                self.sweep_min_frequency_label.config(text=f"Error reading Sweep Min Frequency: {sweep_min_frequency_response}")
+                self.sweep_min_frequency_label.config(text=f"Error reading Sweep Min Frequency")
 
             if not sweep_max_frequency_response.isError():
                 raw_sweep_max_frequency_value = sweep_max_frequency_response.registers[0]
                 sweep_max_frequency = raw_sweep_max_frequency_value / 10
                 self.sweep_max_frequency_label.config(text=f"Sweep Max Frequency: {sweep_max_frequency} Hz")
             else:
-                self.sweep_max_frequency_label.config(text=f"Error reading Sweep Max Frequency: {sweep_max_frequency_response}")
+                self.sweep_max_frequency_label.config(text=f"Error reading Sweep Max Frequency")
 
             if not sweep_stabilization_response.isError():
                 raw_sweep_stabilization_value = sweep_stabilization_response.registers[0]
                 sweep_stabilization = raw_sweep_stabilization_value / 10
                 self.sweep_stabilization_label.config(text=f"Sweep Stabilization: {sweep_stabilization} ms")
             else:
-                self.sweep_stabilization_label.config(text=f"Error reading Sweep Stabilization: {sweep_stabilization_response}")
+                self.sweep_stabilization_label.config(text=f"Error reading Sweep Stabilization")
 
         except ModbusException as e:
             self.status_label.config(text=f"Modbus Exception: {e}")
@@ -469,16 +469,16 @@ class COMConnectorApp:
         self.mcu_temperature_label = tk.Label(self.input_registers_frame, text="MCU Temperature: N/A")
         self.mcu_temperature_label.pack(anchor='w')
 
-        self.mcu_temperature_min_label = tk.Label(self.input_registers_frame, text="MCU Temperature Min (life): N/A")
+        self.mcu_temperature_min_label = tk.Label(self.input_registers_frame, text="MCU Temperature Min (live): N/A")
         self.mcu_temperature_min_label.pack(anchor='w')
 
-        self.mcu_temperature_max_label = tk.Label(self.input_registers_frame, text="MCU Temperature Max (life): N/A")
+        self.mcu_temperature_max_label = tk.Label(self.input_registers_frame, text="MCU Temperature Max (live): N/A")
         self.mcu_temperature_max_label.pack(anchor='w')
 
-        self.radiator_temperature_min_label = tk.Label(self.input_registers_frame, text="Radiator Temperature Min (life): N/A")
+        self.radiator_temperature_min_label = tk.Label(self.input_registers_frame, text="Radiator Temperature Min (live): N/A")
         self.radiator_temperature_min_label.pack(anchor='w')
 
-        self.radiator_temperature_max_label = tk.Label(self.input_registers_frame, text="Radiator Temperature Max (life): N/A")
+        self.radiator_temperature_max_label = tk.Label(self.input_registers_frame, text="Radiator Temperature Max (live): N/A")
         self.radiator_temperature_max_label.pack(anchor='w')
 
         self.motor1_position_average_label = tk.Label(self.input_registers_frame, text="Motor 1 Position Average: N/A")
