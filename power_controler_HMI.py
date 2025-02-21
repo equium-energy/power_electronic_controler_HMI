@@ -78,99 +78,12 @@ class COMConnectorApp:
         else:
             self.status_label.config(text="Not connected to any port")
 
-
-    def convert_motor_status(self, status_code):
-        status_mapping = {
-            0: "null",
-            1: "idle",
-            2: "starting",
-            3: "execute",
-            4: "holding",
-            5: "held",
-            6: "unholding",
-            7: "suspending",
-            8: "suspended",
-            9: "unsuspended",
-            10: "aborting",
-            11: "aborted",
-            12: "clearing",
-            13: "stopping",
-            14: "stopped",
-            15: "resetting",
-            16: "completing",
-            17: "complete"
-        }
-        return status_mapping.get(status_code, "Unknown Status")
-
-    def create_com_port(self):
-        self.port_label = tk.Label(self.com_port_frame, text="Available COM Ports:")
-        self.port_label.pack()
-
-        self.port_combobox = ttk.Combobox(self.com_port_frame)
-        self.port_combobox.pack()
-
-        self.connect_button = tk.Button(self.com_port_frame, text="Connect", command=self.connect_to_port)
-        self.connect_button.pack()
-
-        self.status_label = tk.Label(self.com_port_frame, text="")
-        self.status_label.pack()
-
-        self.start_polling_button = tk.Button(self.com_port_frame, text="Start Polling", command=self.start_polling)
-        self.start_polling_button.pack()
-
-    def refresh_ports(self):
-        self.port_combobox['values'] = [port.device for port in serial.tools.list_ports.comports()]
-        if self.port_combobox['values']:
-            self.port_combobox.current(0)
-
-    def connect_to_port(self):
-        selected_port = self.port_combobox.get()
-        if selected_port:
-            try:
-                self.modbus_client = ModbusClient(
-                    method='rtu',
-                    port=selected_port,
-                    baudrate=115200,
-                    stopbits=1,
-                    parity='N',
-                    bytesize=8,
-                    timeout=1
-                )
-                if self.modbus_client.connect():
-                    self.status_label.config(text=f"Connected to {selected_port}")
-                else:
-                    self.status_label.config(text=f"Failed to connect to {selected_port}")
-            except Exception as e:
-                self.status_label.config(text=f"Failed to connect: {e}")
-        else:
-            self.status_label.config(text="No port selected")
-
-    def start_polling(self):
-        if self.modbus_client and self.modbus_client.is_socket_open():
-            self.polling = True
-            threading.Thread(target=self.poll_data).start()
-        else:
-            self.status_label.config(text="Not connected to any port")
-
-    def poll_data(self):
-        while self.polling:
-            try:
-                time.sleep(time_between_frame)
-                self.read_input_registers()
-                time.sleep(time_between_frame)
-                self.read_holding_registers()
-            except ModbusException as e:
-                self.status_label.config(text=f"Modbus Exception: {e}")
-            except Exception as e:
-                self.status_label.config(text=f"Failed to read data: {e}")
-
     def read_input_registers(self):
         try:
             time.sleep(time_between_frame)
             dc_response = self.modbus_client.read_input_registers(4, 1, unit=1)
             time.sleep(time_between_frame)
             radiator_response = self.modbus_client.read_input_registers(10, 1, unit=1)
-
 
             if not radiator_response.isError():
                 raw_radiator_value = radiator_response.registers[0]/10
@@ -394,10 +307,105 @@ class COMConnectorApp:
             else:
                 self.sweep_resonance_frequency_label.config(text=f"Error reading Sweep Resonance Frequency")
 
+            time.sleep(time_between_frame)
+            motor_status_response = self.modbus_client.read_input_registers(0, 1, unit=1)
+            if not motor_status_response.isError():
+                motor_status_value = motor_status_response.registers[0]
+                motor_status_text = self.convert_motor_status(motor_status_value)
+                self.motor_status_label.config(text=f"Motor Status: {motor_status_text}")
+            else:
+                self.motor_status_label.config(text=f"Error reading Motor Status")
+
         except ModbusException as e:
             self.status_label.config(text=f"Modbus Exception: {e}")
         except Exception as e:
             self.status_label.config(text=f"Failed to read input registers: {e}")
+
+    def convert_motor_status(self, status_code):
+        status_mapping = {
+            0: "null",
+            1: "idle",
+            2: "starting",
+            3: "execute",
+            4: "holding",
+            5: "held",
+            6: "unholding",
+            7: "suspending",
+            8: "suspended",
+            9: "unsuspended",
+            10: "aborting",
+            11: "aborted",
+            12: "clearing",
+            13: "stopping",
+            14: "stopped",
+            15: "resetting",
+            16: "completing",
+            17: "complete"
+        }
+        return status_mapping.get(status_code, "Unknown Status")
+
+    def create_com_port(self):
+        self.port_label = tk.Label(self.com_port_frame, text="Available COM Ports:")
+        self.port_label.pack()
+
+        self.port_combobox = ttk.Combobox(self.com_port_frame)
+        self.port_combobox.pack()
+
+        self.connect_button = tk.Button(self.com_port_frame, text="Connect", command=self.connect_to_port)
+        self.connect_button.pack()
+
+        self.status_label = tk.Label(self.com_port_frame, text="")
+        self.status_label.pack()
+
+        self.start_polling_button = tk.Button(self.com_port_frame, text="Start Polling", command=self.start_polling)
+        self.start_polling_button.pack()
+
+    def refresh_ports(self):
+        self.port_combobox['values'] = [port.device for port in serial.tools.list_ports.comports()]
+        if self.port_combobox['values']:
+            self.port_combobox.current(0)
+
+    def connect_to_port(self):
+        selected_port = self.port_combobox.get()
+        if selected_port:
+            try:
+                self.modbus_client = ModbusClient(
+                    method='rtu',
+                    port=selected_port,
+                    baudrate=115200,
+                    stopbits=1,
+                    parity='N',
+                    bytesize=8,
+                    timeout=1
+                )
+                if self.modbus_client.connect():
+                    self.status_label.config(text=f"Connected to {selected_port}")
+                else:
+                    self.status_label.config(text=f"Failed to connect to {selected_port}")
+            except Exception as e:
+                self.status_label.config(text=f"Failed to connect: {e}")
+        else:
+            self.status_label.config(text="No port selected")
+
+    def start_polling(self):
+        if self.modbus_client and self.modbus_client.is_socket_open():
+            self.polling = True
+            threading.Thread(target=self.poll_data).start()
+        else:
+            self.status_label.config(text="Not connected to any port")
+
+    def poll_data(self):
+        while self.polling:
+            try:
+                time.sleep(time_between_frame)
+                self.read_input_registers()
+                time.sleep(time_between_frame)
+                self.read_holding_registers()
+            except ModbusException as e:
+                self.status_label.config(text=f"Modbus Exception: {e}")
+            except Exception as e:
+                self.status_label.config(text=f"Failed to read data: {e}")
+
 
     def read_holding_registers(self):
         try:
