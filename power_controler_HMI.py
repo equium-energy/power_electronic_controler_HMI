@@ -97,12 +97,6 @@ class COMConnectorApp:
             time.sleep(time_between_frame)
             radiator_response = self.modbus_client.read_input_registers(10, 1, unit=1)
 
-            if not dc_response.isError():
-                raw_dc_value = dc_response.registers[0]
-                dc_voltage = raw_dc_value / 10
-                self.dc_voltage_label.config(text=f"DC Voltage: {dc_voltage} V")
-            else:
-                self.dc_voltage_label.config(text=f"Error reading DC Voltage: {dc_response}")
 
             if not radiator_response.isError():
                 raw_radiator_value = radiator_response.registers[0]/10
@@ -142,7 +136,7 @@ class COMConnectorApp:
             if not ac_voltage_motor1_response.isError():
                 raw_ac_voltage_motor1_value = ac_voltage_motor1_response.registers[0]
                 ac_voltage_motor1 = raw_ac_voltage_motor1_value / 10
-                self.ac_voltage_motor1_label.config(text=f"AC Voltage Motor 1: {ac_voltage_motor1} V")
+                self.ac_voltage_motor1_label.config(text=f"Voltage Motor 1 RMS: {ac_voltage_motor1} V")
             else:
                 self.ac_voltage_motor1_label.config(text=f"Error reading AC Voltage Motor 1: {ac_voltage_motor1_response}")
 
@@ -151,7 +145,7 @@ class COMConnectorApp:
             if not ac_voltage_motor2_response.isError():
                 raw_ac_voltage_motor2_value = ac_voltage_motor2_response.registers[0]
                 ac_voltage_motor2 = raw_ac_voltage_motor2_value / 10
-                self.ac_voltage_motor2_label.config(text=f"AC Voltage Motor 2: {ac_voltage_motor2} V")
+                self.ac_voltage_motor2_label.config(text=f"Voltage Motor 2 RMS: {ac_voltage_motor2} V")
             else:
                 self.ac_voltage_motor2_label.config(text=f"Error reading AC Voltage Motor 2: {ac_voltage_motor2_response}")
 
@@ -160,18 +154,18 @@ class COMConnectorApp:
             if not RMS_current_motor1_response.isError():
                 raw_ac_current_motor1_value = RMS_current_motor1_response.registers[0]
                 ac_current_motor1 = raw_ac_current_motor1_value / 10
-                self.ac_current_motor1_label.config(text=f"AC Current Motor 1: {ac_current_motor1} mA")
+                self.input_RMS_current_motor1_label.config(text=f"Current Motor 1 RMS: {ac_current_motor1} A")
             else:
-                self.ac_current_motor1_label.config(text=f"Error reading AC Current Motor 1: {RMS_current_motor1_response}")
+                self.input_RMS_current_motor1_label.config(text=f"Error reading AC Current Motor 1: {RMS_current_motor1_response}")
 
             time.sleep(time_between_frame)
             RMS_current_motor2_response = self.modbus_client.read_input_registers(8, 1, unit=1)
             if not RMS_current_motor2_response.isError():
                 raw_ac_current_motor2_value = RMS_current_motor2_response.registers[0]
                 ac_current_motor2 = raw_ac_current_motor2_value / 10
-                self.ac_current_motor2_label.config(text=f"AC Current Motor 2: {ac_current_motor2} mA")
+                self.input_RMS_current_motor2_label.config(text=f"Current Motor 2 RMS: {ac_current_motor2} A")
             else:
-                self.ac_current_motor2_label.config(text=f"Error reading AC Current Motor 2: {RMS_current_motor2_response}")
+                self.input_RMS_current_motor2_label.config(text=f"Error reading AC Current Motor 2: {RMS_current_motor2_response}")
 
             time.sleep(time_between_frame)
             mcu_temperature_response = self.modbus_client.read_input_registers(9, 1, unit=1)
@@ -448,9 +442,6 @@ class COMConnectorApp:
             self.status_label.config(text=f"Failed to read holding registers: {e}")
 
     def create_input_registers(self):
-        self.dc_voltage_label = tk.Label(self.input_registers_frame, text="DC Voltage: N/A")
-        self.dc_voltage_label.pack(anchor='w')
-
         self.radiator_temp_label = tk.Label(self.input_registers_frame, text="Radiator Temperature: N/A")
         self.radiator_temp_label.pack(anchor='w')
 
@@ -469,11 +460,11 @@ class COMConnectorApp:
         self.ac_voltage_motor2_label = tk.Label(self.input_registers_frame, text="AC Voltage Motor 2: N/A")
         self.ac_voltage_motor2_label.pack(anchor='w')
 
-        self.ac_current_motor1_label = tk.Label(self.input_registers_frame, text="AC Current Motor 1: N/A")
-        self.ac_current_motor1_label.pack(anchor='w')
+        self.input_RMS_current_motor1_label = tk.Label(self.input_registers_frame, text="AC Current Motor 1: N/A")
+        self.input_RMS_current_motor1_label.pack(anchor='w')
 
-        self.ac_current_motor2_label = tk.Label(self.input_registers_frame, text="AC Current Motor 2: N/A")
-        self.ac_current_motor2_label.pack(anchor='w')
+        self.input_RMS_current_motor2_label = tk.Label(self.input_registers_frame, text="AC Current Motor 2: N/A")
+        self.input_RMS_current_motor2_label.pack(anchor='w')
 
         self.mcu_temperature_label = tk.Label(self.input_registers_frame, text="MCU Temperature: N/A")
         self.mcu_temperature_label.pack(anchor='w')
