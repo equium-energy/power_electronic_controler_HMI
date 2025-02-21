@@ -20,14 +20,14 @@ class COMConnectorApp:
         self.com_port_frame = tk.LabelFrame(self.main_frame, text="Port COM")
         self.com_port_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
+        self.motor_command_frame = tk.LabelFrame(self.main_frame, text="Commande Moteur")
+        self.motor_command_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+
         self.input_registers_frame = tk.LabelFrame(self.main_frame, text="Input Registers")
-        self.input_registers_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+        self.input_registers_frame.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
 
         self.holding_registers_frame = tk.LabelFrame(self.main_frame, text="Holding Registers")
         self.holding_registers_frame.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
-
-        self.motor_command_frame = tk.LabelFrame(self.main_frame, text="Commande Moteur")
-        self.motor_command_frame.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
 
         self.create_com_port()
         self.create_input_registers()
