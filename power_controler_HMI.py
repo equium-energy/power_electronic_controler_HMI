@@ -21,8 +21,11 @@ class COMConnectorApp:
         self.status_label = tk.Label(root, text="")
         self.status_label.pack()
 
-        self.read_button = tk.Button(root, text="Read DC Voltage", command=self.read_dc_voltage)
-        self.read_button.pack()
+        self.read_dc_voltage_button = tk.Button(root, text="Read DC Voltage", command=self.read_dc_voltage)
+        self.read_dc_voltage_button.pack()
+
+        self.read_radiator_temp_button = tk.Button(root, text="Read Radiator Temperature", command=self.read_radiator_temperature)
+        self.read_radiator_temp_button.pack()
 
         self.response_label = tk.Label(root, text="")
         self.response_label.pack()
@@ -71,6 +74,22 @@ class COMConnectorApp:
                 self.response_label.config(text=f"Modbus Exception: {e}")
             except Exception as e:
                 self.response_label.config(text=f"Failed to read DC Voltage: {e}")
+        else:
+            self.response_label.config(text="Not connected to any port")
+
+    def read_radiator_temperature(self):
+        if self.modbus_client and self.modbus_client.is_socket_open():
+            try:
+                response = self.modbus_client.read_input_registers(10, 1, unit=1)
+                if not response.isError():
+                    raw_value = response.registers[0]
+                    self.response_label.config(text=f"Radiator Temperature: {raw_value} °C")
+                else:
+                    self.response_label.config(text=f"Error reading Radiator Temperature: {response}")
+            except ModbusException as e:
+                self.response_label.config(text=f"Modbus Exception: {e}")
+            except Exception as e:
+                self.response_label.config(text=f"Failed to read Radiator Temperature: {e}")
         else:
             self.response_label.config(text="Not connected to any port")
 
