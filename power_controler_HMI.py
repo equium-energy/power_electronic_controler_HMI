@@ -32,13 +32,13 @@ class COMConnectorApp:
         self.radiator_temp_label = tk.Label(root, text="Radiator Temperature: N/A")
         self.radiator_temp_label.pack()
 
-        self.holding_register_label = tk.Label(root, text="Holding Register (1000): N/A")
+        self.holding_register_label = tk.Label(root, text="Initial Frequency (1000): N/A")
         self.holding_register_label.pack()
 
         self.holding_register_entry = tk.Entry(root)
         self.holding_register_entry.pack()
 
-        self.write_holding_register_button = tk.Button(root, text="Write Holding Register", command=self.write_holding_register)
+        self.write_holding_register_button = tk.Button(root, text="Write Initial Frequency", command=self.write_holding_register)
         self.write_holding_register_button.pack()
 
         self.modbus_client = None
@@ -104,9 +104,10 @@ class COMConnectorApp:
 
                 if not holding_response.isError():
                     raw_holding_value = holding_response.registers[0]
-                    self.holding_register_label.config(text=f"Holding Register (1000): {raw_holding_value}")
+                    initial_frequency = raw_holding_value / 10
+                    self.holding_register_label.config(text=f"Initial Frequency: {initial_frequency} Hz")
                 else:
-                    self.holding_register_label.config(text=f"Error reading Holding Register: {holding_response}")
+                    self.holding_register_label.config(text=f"Error reading Initial Frequency: {holding_response}")
 
             except ModbusException as e:
                 self.status_label.config(text=f"Modbus Exception: {e}")
@@ -116,18 +117,20 @@ class COMConnectorApp:
     def write_holding_register(self):
         if self.modbus_client and self.modbus_client.is_socket_open():
             try:
-                value = int(self.holding_register_entry.get())
-                response = self.modbus_client.write_register(1000, value, unit=1)
+                value = float(self.holding_register_entry.get())
+                value_to_write = int(value * 10)
+                time.sleep(0.25)
+                response = self.modbus_client.write_register(1000, value_to_write, unit=1)
                 if not response.isError():
-                    self.status_label.config(text=f"Holding Register (1000) written successfully")
+                    self.status_label.config(text=f"Initial Frequency (1000) written successfully")
                 else:
-                    self.status_label.config(text=f"Error writing Holding Register: {response}")
+                    self.status_label.config(text=f"Error writing Initial Frequency: {response}")
             except ValueError:
-                self.status_label.config(text="Invalid value. Please enter an integer.")
+                self.status_label.config(text="Invalid value. Please enter a number.")
             except ModbusException as e:
                 self.status_label.config(text=f"Modbus Exception: {e}")
             except Exception as e:
-                self.status_label.config(text=f"Failed to write Holding Register: {e}")
+                self.status_label.config(text=f"Failed to write Initial Frequency: {e}")
         else:
             self.status_label.config(text="Not connected to any port")
 
