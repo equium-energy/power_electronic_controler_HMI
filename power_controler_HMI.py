@@ -32,14 +32,19 @@ class COMConnectorApp:
         self.radiator_temp_label = tk.Label(root, text="Radiator Temperature: N/A")
         self.radiator_temp_label.pack()
 
-        self.holding_register_label = tk.Label(root, text="Initial Frequency (1000): N/A")
-        self.holding_register_label.pack()
+        self.initial_frequency_label = tk.Label(root, text="Initial Frequency (1000): N/A")
+        self.initial_frequency_label.pack()
 
-        self.holding_register_entry = tk.Entry(root)
-        self.holding_register_entry.pack()
+        self.initial_frequency_entry = tk.Entry(root)
+        self.initial_frequency_entry.pack()
+        self.initial_frequency_entry.bind('<Return>', self.on_enter_pressed_initial_frequency)
 
-        self.write_holding_register_button = tk.Button(root, text="Write Initial Frequency", command=self.write_holding_register)
-        self.write_holding_register_button.pack()
+        self.max_dc_voltage_label = tk.Label(root, text="Max DC Bus Voltage (1001): N/A")
+        self.max_dc_voltage_label.pack()
+
+        self.max_dc_voltage_entry = tk.Entry(root)
+        self.max_dc_voltage_entry.pack()
+        self.max_dc_voltage_entry.bind('<Return>', self.on_enter_pressed_max_dc_voltage)
 
         self.modbus_client = None
         self.polling = False
@@ -87,7 +92,9 @@ class COMConnectorApp:
                 time.sleep(0.25)
                 radiator_response = self.modbus_client.read_input_registers(10, 1, unit=1)
                 time.sleep(0.25)
-                holding_response = self.modbus_client.read_holding_registers(1000, 1, unit=1)
+                initial_frequency_response = self.modbus_client.read_holding_registers(1000, 1, unit=1)
+                time.sleep(0.25)
+                max_dc_voltage_response = self.modbus_client.read_holding_registers(1001, 1, unit=1)
 
                 if not dc_response.isError():
                     raw_dc_value = dc_response.registers[0]
@@ -102,22 +109,35 @@ class COMConnectorApp:
                 else:
                     self.radiator_temp_label.config(text=f"Error reading Radiator Temperature: {radiator_response}")
 
-                if not holding_response.isError():
-                    raw_holding_value = holding_response.registers[0]
-                    initial_frequency = raw_holding_value / 10
-                    self.holding_register_label.config(text=f"Initial Frequency: {initial_frequency} Hz")
+                if not initial_frequency_response.isError():
+                    raw_initial_frequency_value = initial_frequency_response.registers[0]
+                    initial_frequency = raw_initial_frequency_value / 10
+                    self.initial_frequency_label.config(text=f"Initial Frequency: {initial_frequency} Hz")
                 else:
-                    self.holding_register_label.config(text=f"Error reading Initial Frequency: {holding_response}")
+                    self.initial_frequency_label.config(text=f"Error reading Initial Frequency: {initial_frequency_response}")
+
+                if not max_dc_voltage_response.isError():
+                    raw_max_dc_voltage_value = max_dc_voltage_response.registers[0]
+                    max_dc_voltage = raw_max_dc_voltage_value / 10
+                    self.max_dc_voltage_label.config(text=f"Max DC Bus Voltage: {max_dc_voltage} V")
+                else:
+                    self.max_dc_voltage_label.config(text=f"Error reading Max DC Bus Voltage: {max_dc_voltage_response}")
 
             except ModbusException as e:
                 self.status_label.config(text=f"Modbus Exception: {e}")
             except Exception as e:
                 self.status_label.config(text=f"Failed to read data: {e}")
 
-    def write_holding_register(self):
+    def on_enter_pressed_initial_frequency(self, event):
+        self.write_initial_frequency()
+
+    def on_enter_pressed_max_dc_voltage(self, event):
+        self.write_max_dc_voltage()
+
+    def write_initial_frequency(self):
         if self.modbus_client and self.modbus_client.is_socket_open():
             try:
-                value = float(self.holding_register_entry.get())
+                value = float(self.initial_frequency_entry.get())
                 value_to_write = int(value * 10)
                 time.sleep(0.25)
                 response = self.modbus_client.write_register(1000, value_to_write, unit=1)
@@ -131,6 +151,26 @@ class COMConnectorApp:
                 self.status_label.config(text=f"Modbus Exception: {e}")
             except Exception as e:
                 self.status_label.config(text=f"Failed to write Initial Frequency: {e}")
+        else:
+            self.status_label.config(text="Not connected to any port")
+
+    def write_max_dc_voltage(self):
+        if self.modbus_client and self.modbus_client.is_socket_open():
+            try:
+                value = float(self.max_dc_voltage_entry.get())
+                value_to_write = int(value * 10)
+                time.sleep(0.25)
+                response = self.modbus_client.write_register(1001, value_to_write, unit=1)
+                if not response.isError():
+                    self.status_label.config(text=f"Max DC Bus Voltage (1001) written successfully")
+                else:
+                    self.status_label.config(text=f"Error writing Max DC Bus Voltage: {response}")
+            except ValueError:
+                self.status_label.config(text="Invalid value. Please enter a number.")
+            except ModbusException as e:
+                self.status_label.config(text=f"Modbus Exception: {e}")
+            except Exception as e:
+                self.status_label.config(text=f"Failed to write Max DC Bus Voltage: {e}")
         else:
             self.status_label.config(text="Not connected to any port")
 
