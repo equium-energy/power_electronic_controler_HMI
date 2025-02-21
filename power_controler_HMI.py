@@ -13,36 +13,42 @@ class COMConnectorApp:
         self.root = root
         self.root.title("COM Port Connector")
 
-        self.port_label = tk.Label(root, text="Available COM Ports:")
-        self.port_label.pack()
-
-        self.port_combobox = ttk.Combobox(root)
-        self.port_combobox.pack()
-
-        self.connect_button = tk.Button(root, text="Connect", command=self.connect_to_port)
-        self.connect_button.pack()
-
-        self.status_label = tk.Label(root, text="")
-        self.status_label.pack()
-
-        self.start_polling_button = tk.Button(root, text="Start Polling", command=self.start_polling)
-        self.start_polling_button.pack()
 
         self.main_frame = tk.Frame(root)
         self.main_frame.pack(padx=10, pady=10, fill="both", expand="yes")
 
+        self.com_port_frame = tk.LabelFrame(self.main_frame, text="Port COM")
+        self.com_port_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
         self.input_registers_frame = tk.LabelFrame(self.main_frame, text="Input Registers")
-        self.input_registers_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+        self.input_registers_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
 
         self.holding_registers_frame = tk.LabelFrame(self.main_frame, text="Holding Registers")
-        self.holding_registers_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+        self.holding_registers_frame.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
 
+        self.create_com_port()
         self.create_input_registers()
         self.create_holding_registers()
 
         self.modbus_client = None
         self.polling = False
         self.refresh_ports()
+
+    def create_com_port(self):
+        self.port_label = tk.Label(self.com_port_frame, text="Available COM Ports:")
+        self.port_label.pack()
+
+        self.port_combobox = ttk.Combobox(self.com_port_frame)
+        self.port_combobox.pack()
+
+        self.connect_button = tk.Button(self.com_port_frame, text="Connect", command=self.connect_to_port)
+        self.connect_button.pack()
+
+        self.status_label = tk.Label(self.com_port_frame, text="")
+        self.status_label.pack()
+
+        self.start_polling_button = tk.Button(self.com_port_frame, text="Start Polling", command=self.start_polling)
+        self.start_polling_button.pack()
 
     def refresh_ports(self):
         self.port_combobox['values'] = [port.device for port in serial.tools.list_ports.comports()]
