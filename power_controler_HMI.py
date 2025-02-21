@@ -60,6 +60,9 @@ class COMConnectorApp:
         self.reset_button = tk.Button(self.motor_command_frame, text="Reset", command=lambda: self.send_command(7))
         self.reset_button.pack(pady=5)
 
+        self.motor_status_label = tk.Label(self.motor_command_frame, text="Motor Status: N/A")
+        self.motor_status_label.pack(pady=5)
+
     def send_command(self, command):
         if self.modbus_client and self.modbus_client.is_socket_open():
             try:
@@ -74,6 +77,30 @@ class COMConnectorApp:
                 self.status_label.config(text=f"Failed to send command: {e}")
         else:
             self.status_label.config(text="Not connected to any port")
+
+
+    def convert_motor_status(self, status_code):
+        status_mapping = {
+            0: "null",
+            1: "idle",
+            2: "starting",
+            3: "execute",
+            4: "holding",
+            5: "held",
+            6: "unholding",
+            7: "suspending",
+            8: "suspended",
+            9: "unsuspended",
+            10: "aborting",
+            11: "aborted",
+            12: "clearing",
+            13: "stopping",
+            14: "stopped",
+            15: "resetting",
+            16: "completing",
+            17: "complete"
+        }
+        return status_mapping.get(status_code, "Unknown Status")
 
     def create_com_port(self):
         self.port_label = tk.Label(self.com_port_frame, text="Available COM Ports:")
