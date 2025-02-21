@@ -3,6 +3,8 @@ from tkinter import ttk
 import serial.tools.list_ports
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 from pymodbus.exceptions import ModbusException
+import threading
+import time
 
 class COMConnectorApp:
     def __init__(self, root):
@@ -21,16 +23,26 @@ class COMConnectorApp:
         self.status_label = tk.Label(root, text="")
         self.status_label.pack()
 
-        self.read_dc_voltage_button = tk.Button(root, text="Read DC Voltage", command=self.read_dc_voltage)
-        self.read_dc_voltage_button.pack()
+        self.start_polling_button = tk.Button(root, text="Start Polling", command=self.start_polling)
+        self.start_polling_button.pack()
 
-        self.read_radiator_temp_button = tk.Button(root, text="Read Radiator Temperature", command=self.read_radiator_temperature)
-        self.read_radiator_temp_button.pack()
+        self.dc_voltage_label = tk.Label(root, text="DC Voltage: N/A")
+        self.dc_voltage_label.pack()
 
-        self.response_label = tk.Label(root, text="")
-        self.response_label.pack()
+        self.radiator_temp_label = tk.Label(root, text="Radiator Temperature: N/A")
+        self.radiator_temp_label.pack()
+
+        self.holding_register_label = tk.Label(root, text="Holding Register (1000): N/A")
+        self.holding_register_label.pack()
+
+        self.holding_register_entry = tk.Entry(root)
+        self.holding_register_entry.pack()
+
+        self.write_holding_register_button = tk.Button(root, text="Write Holding Register", command=self.write_holding_register)
+        self.write_holding_register_button.pack()
 
         self.modbus_client = None
+        self.polling = False
         self.refresh_ports()
 
     def refresh_ports(self):
@@ -60,38 +72,64 @@ class COMConnectorApp:
         else:
             self.status_label.config(text="No port selected")
 
-    def read_dc_voltage(self):
+    def start_polling(self):
         if self.modbus_client and self.modbus_client.is_socket_open():
-            try:
-                response = self.modbus_client.read_input_registers(4, 1, unit=1)
-                if not response.isError():
-                    raw_value = response.registers[0]
-                    dc_voltage = raw_value / 10
-                    self.response_label.config(text=f"DC Voltage: {dc_voltage} V")
-                else:
-                    self.response_label.config(text=f"Error reading DC Voltage: {response}")
-            except ModbusException as e:
-                self.response_label.config(text=f"Modbus Exception: {e}")
-            except Exception as e:
-                self.response_label.config(text=f"Failed to read DC Voltage: {e}")
+            self.polling = True
+            threading.Thread(target=self.poll_data).start()
         else:
-            self.response_label.config(text="Not connected to any port")
+            self.status_label.config(text="Not connected to any port")
 
-    def read_radiator_temperature(self):
+    def poll_data(self):
+        while self.polling:
+            try:
+                time.sleep(0.25)
+                dc_response = self.modbus_client.read_input_registers(4, 1, unit=1)
+                time.sleep(0.25)
+                radiator_response = self.modbus_client.read_input_registers(10, 1, unit=1)
+                time.sleep(0.25)
+                holding_response = self.modbus_client.read_holding_registers(1000, 1, unit=1)
+
+                if not dc_response.isError():
+                    raw_dc_value = dc_response.registers[0]
+                    dc_voltage = raw_dc_value / 10
+                    self.dc_voltage_label.config(text=f"DC Voltage: {dc_voltage} V")
+                else:
+                    self.dc_voltage_label.config(text=f"Error reading DC Voltage: {dc_response}")
+
+                if not radiator_response.isError():
+                    raw_radiator_value = radiator_response.registers[0]
+                    self.radiator_temp_label.config(text=f"Radiator Temperature: {raw_radiator_value} °C")
+                else:
+                    self.radiator_temp_label.config(text=f"Error reading Radiator Temperature: {radiator_response}")
+
+                if not holding_response.isError():
+                    raw_holding_value = holding_response.registers[0]
+                    self.holding_register_label.config(text=f"Holding Register (1000): {raw_holding_value}")
+                else:
+                    self.holding_register_label.config(text=f"Error reading Holding Register: {holding_response}")
+
+            except ModbusException as e:
+                self.status_label.config(text=f"Modbus Exception: {e}")
+            except Exception as e:
+                self.status_label.config(text=f"Failed to read data: {e}")
+
+    def write_holding_register(self):
         if self.modbus_client and self.modbus_client.is_socket_open():
             try:
-                response = self.modbus_client.read_input_registers(10, 1, unit=1)
+                value = int(self.holding_register_entry.get())
+                response = self.modbus_client.write_register(1000, value, unit=1)
                 if not response.isError():
-                    raw_value = response.registers[0]
-                    self.response_label.config(text=f"Radiator Temperature: {raw_value} °C")
+                    self.status_label.config(text=f"Holding Register (1000) written successfully")
                 else:
-                    self.response_label.config(text=f"Error reading Radiator Temperature: {response}")
+                    self.status_label.config(text=f"Error writing Holding Register: {response}")
+            except ValueError:
+                self.status_label.config(text="Invalid value. Please enter an integer.")
             except ModbusException as e:
-                self.response_label.config(text=f"Modbus Exception: {e}")
+                self.status_label.config(text=f"Modbus Exception: {e}")
             except Exception as e:
-                self.response_label.config(text=f"Failed to read Radiator Temperature: {e}")
+                self.status_label.config(text=f"Failed to write Holding Register: {e}")
         else:
-            self.response_label.config(text="Not connected to any port")
+            self.status_label.config(text="Not connected to any port")
 
 if __name__ == "__main__":
     root = tk.Tk()
