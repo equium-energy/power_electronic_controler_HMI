@@ -1,46 +1,54 @@
-import tkinter as tk
+from PySide6.QtWidgets import QLabel, QPushButton, QVBoxLayout
 from pymodbus.exceptions import ModbusException
 
 class MotorCommand:
     def __init__(self, frame):
         self.frame = frame
+        self.layout = QVBoxLayout(self.frame)
         self.create_motor_command_buttons()
-        self.motor_status_label = tk.Label(self.frame, text="Motor Status: N/A")
-        self.motor_status_label.pack(pady=5)
+        self.motor_status_label = QLabel("Motor Status: N/A", self.frame)
+        self.layout.addWidget(self.motor_status_label)
 
     def create_motor_command_buttons(self):
-        self.start_button = tk.Button(self.frame, text="Start", command=lambda: self.send_command(1))
-        self.start_button.pack(pady=5)
+        self.start_button = QPushButton("Start", self.frame)
+        self.start_button.clicked.connect(lambda: self.send_command(1))
+        self.layout.addWidget(self.start_button)
 
-        self.stop_button = tk.Button(self.frame, text="Stop", command=lambda: self.send_command(2))
-        self.stop_button.pack(pady=5)
+        self.stop_button = QPushButton("Stop", self.frame)
+        self.stop_button.clicked.connect(lambda: self.send_command(2))
+        self.layout.addWidget(self.stop_button)
 
-        self.abort_button = tk.Button(self.frame, text="Abort", command=lambda: self.send_command(3))
-        self.abort_button.pack(pady=5)
+        self.abort_button = QPushButton("Abort", self.frame)
+        self.abort_button.clicked.connect(lambda: self.send_command(3))
+        self.layout.addWidget(self.abort_button)
 
-        self.clear_button = tk.Button(self.frame, text="Clear", command=lambda: self.send_command(4))
-        self.clear_button.pack(pady=5)
+        self.clear_button = QPushButton("Clear", self.frame)
+        self.clear_button.clicked.connect(lambda: self.send_command(4))
+        self.layout.addWidget(self.clear_button)
 
-        self.suspend_button = tk.Button(self.frame, text="Suspend", command=lambda: self.send_command(5))
-        self.suspend_button.pack(pady=5)
+        self.suspend_button = QPushButton("Suspend", self.frame)
+        self.suspend_button.clicked.connect(lambda: self.send_command(5))
+        self.layout.addWidget(self.suspend_button)
 
-        self.unsuspend_button = tk.Button(self.frame, text="Unsuspend", command=lambda: self.send_command(6))
-        self.unsuspend_button.pack(pady=5)
+        self.unsuspend_button = QPushButton("Unsuspend", self.frame)
+        self.unsuspend_button.clicked.connect(lambda: self.send_command(6))
+        self.layout.addWidget(self.unsuspend_button)
 
-        self.reset_button = tk.Button(self.frame, text="Reset", command=lambda: self.send_command(7))
-        self.reset_button.pack(pady=5)
+        self.reset_button = QPushButton("Reset", self.frame)
+        self.reset_button.clicked.connect(lambda: self.send_command(7))
+        self.layout.addWidget(self.reset_button)
 
     def send_command(self, command):
         if self.modbus_client and self.modbus_client.is_socket_open():
             try:
                 response = self.modbus_client.write_register(0, command, unit=1)
                 if not response.isError():
-                    self.status_label.config(text=f"Command {command} sent successfully")
+                    self.status_label.setText(f"Command {command} sent successfully")
                 else:
-                    self.status_label.config(text=f"Error sending command {command}: {response}")
+                    self.status_label.setText(f"Error sending command {command}: {response}")
             except ModbusException as e:
-                self.status_label.config(text=f"Modbus Exception: {e}")
+                self.status_label.setText(f"Modbus Exception: {e}")
             except Exception as e:
-                self.status_label.config(text=f"Failed to send command: {e}")
+                self.status_label.setText(f"Failed to send command: {e}")
         else:
-            self.status_label.config(text="Not connected to any port")
+            self.status_label.setText("Not connected to any port")

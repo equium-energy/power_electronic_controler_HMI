@@ -1,5 +1,5 @@
-import tkinter as tk
-from tkinter import ttk
+from PySide6.QtWidgets import QApplication, QMainWindow, QFrame, QLabel, QVBoxLayout, QHBoxLayout, QComboBox, QPushButton, QLineEdit, QLabel
+from PySide6.QtCore import QTimer
 import threading
 import time
 from com_port import COMConnector
@@ -9,25 +9,31 @@ from holding_registers import HoldingRegisters
 
 time_between_frame = 0.02
 
-class COMConnectorApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("COM Port Connector")
+class COMConnectorApp(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("COM Port Connector")
 
-        self.main_frame = tk.Frame(root)
-        self.main_frame.pack(padx=10, pady=10, fill="both", expand="yes")
+        self.main_frame = QFrame(self)
+        self.setCentralWidget(self.main_frame)
 
-        self.com_port_frame = tk.LabelFrame(self.main_frame, text="Port COM")
-        self.com_port_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+        self.layout = QHBoxLayout(self.main_frame)
 
-        self.motor_command_frame = tk.LabelFrame(self.main_frame, text="Commande Moteur")
-        self.motor_command_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+        self.com_port_frame = QFrame(self.main_frame)
+        self.com_port_frame.setLayout(QVBoxLayout())
+        self.layout.addWidget(self.com_port_frame)
 
-        self.input_registers_frame = tk.LabelFrame(self.main_frame, text="Input Registers")
-        self.input_registers_frame.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
+        self.motor_command_frame = QFrame(self.main_frame)
+        self.motor_command_frame.setLayout(QVBoxLayout())
+        self.layout.addWidget(self.motor_command_frame)
 
-        self.holding_registers_frame = tk.LabelFrame(self.main_frame, text="Holding Registers")
-        self.holding_registers_frame.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
+        self.input_registers_frame = QFrame(self.main_frame)
+        self.input_registers_frame.setLayout(QVBoxLayout())
+        self.layout.addWidget(self.input_registers_frame)
+
+        self.holding_registers_frame = QFrame(self.main_frame)
+        self.holding_registers_frame.setLayout(QVBoxLayout())
+        self.layout.addWidget(self.holding_registers_frame)
 
         self.com_port = COMConnector(self.com_port_frame)
         self.motor_command = MotorCommand(self.motor_command_frame)
@@ -43,7 +49,7 @@ class COMConnectorApp:
             self.polling = True
             threading.Thread(target=self.poll_data).start()
         else:
-            self.com_port.status_label.config(text="Not connected to any port")
+            self.com_port.status_label.setText("Not connected to any port")
 
     def poll_data(self):
         while self.polling:
@@ -53,7 +59,7 @@ class COMConnectorApp:
                 time.sleep(time_between_frame)
                 self.holding_registers.read_holding_registers(self.modbus_client)
             except Exception as e:
-                self.com_port.status_label.config(text=f"Failed to read data: {e}")
+                self.com_port.status_label.setText(f"Failed to read data: {e}")
 
     def connect_to_port(self):
         self.modbus_client = self.com_port.modbus_client
@@ -65,6 +71,7 @@ class COMConnectorApp:
         self.holding_registers.status_label = self.com_port.status_label
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = COMConnectorApp(root)
-    root.mainloop()
+    app = QApplication([])
+    window = COMConnectorApp()
+    window.show()
+    app.exec()
