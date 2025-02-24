@@ -9,6 +9,7 @@ from holding_registers import HoldingRegisters
 
 time_between_frame = 0.02
 
+
 class COMConnectorApp:
     def __init__(self, root):
         self.root = root
@@ -20,14 +21,24 @@ class COMConnectorApp:
         self.com_port_frame = tk.LabelFrame(self.main_frame, text="Port COM")
         self.com_port_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
-        self.motor_command_frame = tk.LabelFrame(self.main_frame, text="Commande Moteur")
+        self.motor_command_frame = tk.LabelFrame(
+            self.main_frame, text="Commande Moteur"
+        )
         self.motor_command_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
-        self.input_registers_frame = tk.LabelFrame(self.main_frame, text="Input Registers")
-        self.input_registers_frame.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
+        self.input_registers_frame = tk.LabelFrame(
+            self.main_frame, text="Input Registers"
+        )
+        self.input_registers_frame.grid(
+            row=0, column=2, padx=10, pady=10, sticky="nsew"
+        )
 
-        self.holding_registers_frame = tk.LabelFrame(self.main_frame, text="Holding Registers")
-        self.holding_registers_frame.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
+        self.holding_registers_frame = tk.LabelFrame(
+            self.main_frame, text="Holding Registers"
+        )
+        self.holding_registers_frame.grid(
+            row=0, column=3, padx=10, pady=10, sticky="nsew"
+        )
 
         self.com_port = COMConnector(self.com_port_frame)
         self.motor_command = MotorCommand(self.motor_command_frame)
@@ -63,6 +74,7 @@ class COMConnectorApp:
         self.input_registers.status_label = self.com_port.status_label
         self.holding_registers.modbus_client = self.modbus_client
         self.holding_registers.status_label = self.com_port.status_label
+
 
 if __name__ == "__main__":
     root = tk.Tk()

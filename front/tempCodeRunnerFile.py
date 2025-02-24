@@ -6,6 +6,7 @@ from pymodbus.exceptions import ModbusException
 import threading
 import time
 
+
 class COMConnectorApp:
     def __init__(self, root):
         self.root = root
@@ -17,13 +18,17 @@ class COMConnectorApp:
         self.port_combobox = ttk.Combobox(root)
         self.port_combobox.pack()
 
-        self.connect_button = tk.Button(root, text="Connect", command=self.connect_to_port)
+        self.connect_button = tk.Button(
+            root, text="Connect", command=self.connect_to_port
+        )
         self.connect_button.pack()
 
         self.status_label = tk.Label(root, text="")
         self.status_label.pack()
 
-        self.start_polling_button = tk.Button(root, text="Start Polling", command=self.start_polling)
+        self.start_polling_button = tk.Button(
+            root, text="Start Polling", command=self.start_polling
+        )
         self.start_polling_button.pack()
 
         self.dc_voltage_label = tk.Label(root, text="DC Voltage: N/A")
@@ -32,13 +37,17 @@ class COMConnectorApp:
         self.radiator_temp_label = tk.Label(root, text="Radiator Temperature: N/A")
         self.radiator_temp_label.pack()
 
-        self.holding_register_label = tk.Label(root, text="Holding Register (1000): N/A")
+        self.holding_register_label = tk.Label(
+            root, text="Holding Register (1000): N/A"
+        )
         self.holding_register_label.pack()
 
         self.holding_register_entry = tk.Entry(root)
         self.holding_register_entry.pack()
 
-        self.write_holding_register_button = tk.Button(root, text="Write Holding Register", command=self.write_holding_register)
+        self.write_holding_register_button = tk.Button(
+            root, text="Write Holding Register", command=self.write_holding_register
+        )
         self.write_holding_register_button.pack()
 
         self.modbus_client = None
@@ -46,8 +55,10 @@ class COMConnectorApp:
         self.refresh_ports()
 
     def refresh_ports(self):
-        self.port_combobox['values'] = [port.device for port in serial.tools.list_ports.comports()]
-        if self.port_combobox['values']:
+        self.port_combobox["values"] = [
+            port.device for port in serial.tools.list_ports.comports()
+        ]
+        if self.port_combobox["values"]:
             self.port_combobox.current(0)
 
     def connect_to_port(self):
@@ -55,18 +66,20 @@ class COMConnectorApp:
         if selected_port:
             try:
                 self.modbus_client = ModbusClient(
-                    method='rtu',
+                    method="rtu",
                     port=selected_port,
                     baudrate=115200,
                     stopbits=1,
-                    parity='N',
+                    parity="N",
                     bytesize=8,
-                    timeout=1
+                    timeout=1,
                 )
                 if self.modbus_client.connect():
                     self.status_label.config(text=f"Connected to {selected_port}")
                 else:
-                    self.status_label.config(text=f"Failed to connect to {selected_port}")
+                    self.status_label.config(
+                        text=f"Failed to connect to {selected_port}"
+                    )
             except Exception as e:
                 self.status_label.config(text=f"Failed to connect: {e}")
         else:
@@ -85,28 +98,42 @@ class COMConnectorApp:
                 time.sleep(0.25)
                 dc_response = self.modbus_client.read_input_registers(4, 1, unit=1)
                 time.sleep(0.25)
-                radiator_response = self.modbus_client.read_input_registers(10, 1, unit=1)
+                radiator_response = self.modbus_client.read_input_registers(
+                    10, 1, unit=1
+                )
                 time.sleep(0.25)
-                holding_response = self.modbus_client.read_holding_registers(1000, 1, unit=1)
+                holding_response = self.modbus_client.read_holding_registers(
+                    1000, 1, unit=1
+                )
 
                 if not dc_response.isError():
                     raw_dc_value = dc_response.registers[0]
                     dc_voltage = raw_dc_value / 10
                     self.dc_voltage_label.config(text=f"DC Voltage: {dc_voltage} V")
                 else:
-                    self.dc_voltage_label.config(text=f"Error reading DC Voltage: {dc_response}")
+                    self.dc_voltage_label.config(
+                        text=f"Error reading DC Voltage: {dc_response}"
+                    )
 
                 if not radiator_response.isError():
                     raw_radiator_value = radiator_response.registers[0]
-                    self.radiator_temp_label.config(text=f"Radiator Temperature: {raw_radiator_value} °C")
+                    self.radiator_temp_label.config(
+                        text=f"Radiator Temperature: {raw_radiator_value} °C"
+                    )
                 else:
-                    self.radiator_temp_label.config(text=f"Error reading Radiator Temperature: {radiator_response}")
+                    self.radiator_temp_label.config(
+                        text=f"Error reading Radiator Temperature: {radiator_response}"
+                    )
 
                 if not holding_response.isError():
                     raw_holding_value = holding_response.registers[0]
-                    self.holding_register_label.config(text=f"Holding Register (1000): {raw_holding_value}")
+                    self.holding_register_label.config(
+                        text=f"Holding Register (1000): {raw_holding_value}"
+                    )
                 else:
-                    self.holding_register_label.config(text=f"Error reading Holding Register: {holding_response}")
+                    self.holding_register_label.config(
+                        text=f"Error reading Holding Register: {holding_response}"
+                    )
 
             except ModbusException as e:
                 self.status_label.config(text=f"Modbus Exception: {e}")
@@ -119,9 +146,13 @@ class COMConnectorApp:
                 value = int(self.holding_register_entry.get())
                 response = self.modbus_client.write_register(1000, value, unit=1)
                 if not response.isError():
-                    self.status_label.config(text=f"Holding Register (1000) written successfully")
+                    self.status_label.config(
+                        text=f"Holding Register (1000) written successfully"
+                    )
                 else:
-                    self.status_label.config(text=f"Error writing Holding Register: {response}")
+                    self.status_label.config(
+                        text=f"Error writing Holding Register: {response}"
+                    )
             except ValueError:
                 self.status_label.config(text="Invalid value. Please enter an integer.")
             except ModbusException as e:
@@ -130,6 +161,7 @@ class COMConnectorApp:
                 self.status_label.config(text=f"Failed to write Holding Register: {e}")
         else:
             self.status_label.config(text="Not connected to any port")
+
 
 if __name__ == "__main__":
     root = tk.Tk()
