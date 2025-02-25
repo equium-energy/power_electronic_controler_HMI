@@ -75,7 +75,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.modbus_client = ModbusClient(
                     method="rtu",
                     port=current_port,
-                    baudrate=115200,
+                    baudrate=19200,
                     stopbits=1,
                     parity="N",
                     bytesize=8,
