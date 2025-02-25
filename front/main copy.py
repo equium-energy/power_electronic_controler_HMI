@@ -1,4 +1,5 @@
 import sys
+from typing import List
 from PySide6 import QtWidgets, QtCore, QtUiTools
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QGroupBox
 import threading
@@ -13,15 +14,17 @@ from holding_registers import HoldingRegisters
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 import pymodbus
 
-time_between_frame = 0.02
+time_between_frame = 0.05
 
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-
         loader = QtUiTools.QUiLoader()
-        self.main_window = loader.load("main_window.ui", self)
+        ui_file = QtCore.QFile("front/main_window.ui")
+        ui_file.open(QtCore.QFile.ReadOnly)
+        self.main_window = loader.load(ui_file, self)
+        ui_file.close()
         self.modbus_client = None
         self.polling = False
         self.initialize_window()
@@ -68,10 +71,25 @@ class MainWindow(QtWidgets.QMainWindow):
         self.label_consol: QtWidgets.QLabel = self.main_window.findChild(
             QtWidgets.QLabel, "label_consol"
         )
+        self.table_temp: QtWidgets.QTableWidget = self.main_window.findChild(
+            QtWidgets.QTableWidget, "table_temp"
+        )
+        self.table_motor1: QtWidgets.QTableWidget = self.main_window.findChild(
+            QtWidgets.QTableWidget, "table_motor1"
+        )
+        self.table_motor2: QtWidgets.QTableWidget = self.main_window.findChild(
+            QtWidgets.QTableWidget, "table_motor2"
+        )
+        self.table_power: QtWidgets.QTableWidget = self.main_window.findChild(
+            QtWidgets.QTableWidget, "table_power"
+        )
+        self.table_other: QtWidgets.QTableWidget = self.main_window.findChild(
+            QtWidgets.QTableWidget, "table_other"
+        )
 
     def set_connection(self) -> None:
         """Define the connections fot the Q objects"""
-        self.comboBox_ComPorts.activated.connect(self.set_port)
+        self.comboBox_ComPorts.activated.connect(self.set_ports)
         self.pushButton_connect.clicked.connect(self.connect_to_port)
         self.pushButton_start.clicked.connect(self.start_cmd)
         self.pushButton_stop.clicked.connect(self.stop_cmd)
@@ -134,9 +152,9 @@ class MainWindow(QtWidgets.QMainWindow):
         while self.polling:
             try:
                 time.sleep(time_between_frame)
-                self.input_registers.read_input_registers(self.modbus_client)
+                self.read_input_register()
                 time.sleep(time_between_frame)
-                self.holding_registers.read_holding_registers(self.modbus_client)
+                self.read_holding_registers()
             except Exception as e:
                 self.label_consol.setText(self.label_consol.text() + "\n" + f"Failed to read data: {e}")
                 self.polling = False
@@ -185,6 +203,70 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.label_consol.setText(self.label_consol.text() + "\n" + f"Failed to send command: {e}")
         else:
             self.label_consol.setText(self.label_consol.text() + "\n" + "Not connected to any port")
+
+    def read_input_register(self) -> None:
+        """Read the input registers to write them in the corresponding table"""
+        table_data = {
+            self.table_temp: [10, 19, 20, 9, 17, 29],
+            self.table_motor1: [3, 11, 13, 12, 5, 7, 26],
+            self.table_motor2: [18, 14, 16, 15, 6, 8, 27],
+            self.table_power: [21, 22],
+            self.table_other: [4, 20, 28],
+        }
+
+        # Iterate over the dictionary and set table values
+        for table, values in table_data.items():
+            self.set_table_value(values, table)
+
+        motor_status = self.modbus_client.read_input_registers(0, 1, unit=1)
+        if not motor_status.isError():
+            motor_status_value = motor_status.registers[0]
+            motor_status_text = self.convert_motor_status(motor_status_value)
+            self.label_motStatus.setText(motor_status_text)
+        else:
+            self.label_motStatus.setText("Error reading Motor Status")
+
+    def set_table_value(self, input_list: List[int], table: QtWidgets.QTableWidget) -> None:
+        """Set the value in the Input register table"""
+        for i, idx in enumerate(input_list):
+            gain = 10
+            if idx in [26, 27]:
+                gain = 100
+            input_reg = self.modbus_client.read_input_registers(idx, 1, unit=1)
+            if not input_reg.isError():
+                val_for_table = str(input_reg.registers[0] / gain)
+                table.setItem(0, i, QtWidgets.QTableWidgetItem(val_for_table))
+                time.sleep(time_between_frame)
+            else:
+                table.setItem(0, i, QtWidgets.QTableWidgetItem("Error"))
+        time.sleep(time_between_frame)
+
+    def convert_motor_status(self, status_code) -> dict[int, str]:
+        """Get the str motor status based on its input response"""
+        status_mapping = {
+            0: "null",
+            1: "idle",
+            2: "starting",
+            3: "execute",
+            4: "holding",
+            5: "held",
+            6: "unholding",
+            7: "suspending",
+            8: "suspended",
+            9: "unsuspended",
+            10: "aborting",
+            11: "aborted",
+            12: "clearing",
+            13: "stopping",
+            14: "stopped",
+            15: "resetting",
+            16: "completing",
+            17: "complete",
+        }
+        return status_mapping.get(status_code, "Unknown Status")
+    
+    def read_holding_registers(self) -> None:
+        """Read the holding register"""
 
 # if __name__ == "__main__":
 app = QApplication(sys.argv)
