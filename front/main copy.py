@@ -3,12 +3,15 @@ from PySide6 import QtWidgets, QtCore, QtUiTools
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QGroupBox
 import threading
 import time
+
+import pymodbus.exceptions
 from com_port import COMConnector
 from all_functions import refresh_ports
 from motor_command import MotorCommand
 from input_registers import InputRegisters
 from holding_registers import HoldingRegisters
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
+import pymodbus
 
 time_between_frame = 0.02
 
@@ -66,6 +69,13 @@ class MainWindow(QtWidgets.QMainWindow):
     def set_connection(self) -> None:
         """Define the connections"""
         self.comboBox_ComPorts.currentTextChanged.connect(self.connect_to_port)
+        self.pushButton_start.clicked.connect(self.start_cmd)
+        self.pushButton_stop.clicked.connect(self.stop_cmd)
+        self.pushButton_abort.clicked.connect(self.abort_cmd)
+        self.pushButton_clear.clicked.connect(self.clear_cmd)
+        self.pushButton_suspend.clicked.connect(self.suspend_cmd)
+        self.pushButton_unsuspend.clicked.connect(self.unsuspend_cmd)
+        self.pushButton_reset.clicked.connect(self.rest_cmd)
 
     def connect_to_port(self, current_port: str) -> None:
         """Connection to the port for COM Port ComboBox"""
@@ -99,6 +109,53 @@ class MainWindow(QtWidgets.QMainWindow):
             threading.Thread(target=self.poll_data).start()
         else:
             self.label_consol.setText(self.label_consol.text() + "\n" + "Not connected to any port")
+
+    def start_cmd(self) -> None:
+        """Start button signal"""
+        self.send_command(1)
+
+    def stop_cmd(self) -> None:
+        """Start button signal"""
+        self.send_command(2)
+
+    def abort_cmd(self) -> None:
+        """Start button signal"""
+        self.send_command(3)
+
+    def clear_cmd(self) -> None:
+        """Start button signal"""
+        self.send_command(4)
+
+    def suspend_cmd(self) -> None:
+        """Start button signal"""
+        self.send_command(5)
+
+    def unsuspend_cmd(self) -> None:
+        """Start button signal"""
+        self.send_command(6)
+
+    def reset_cmd(self) -> None:
+        """Start button signal"""
+        self.send_command(7)
+
+    def send_command(self, command: int):
+        if self.modbus_client and self.modbus_client.is_socket_open():
+            try:
+                response = self.modbus_client.write_register(0, command, unit=1)
+                if not response.isError():
+                    self.status_label.config(
+                        text=f"Command {command} sent successfully"
+                    )
+                else:
+                    self.status_label.config(
+                        text=f"Error sending command {command}: {response}"
+                    )
+            except pymodbus.exceptions.ModbusException as e:
+                self.status_label.config(text=f"Modbus Exception: {e}")
+            except Exception as e:
+                self.status_label.config(text=f"Failed to send command: {e}")
+        else:
+            self.status_label.config(text="Not connected to any port")
 
 class TestOk():
     def __init__(self):
