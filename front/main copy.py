@@ -1,20 +1,16 @@
 import sys
 from typing import List
 from PySide6 import QtWidgets, QtCore, QtUiTools
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QGroupBox
+from PySide6.QtWidgets import QApplication
 import threading
 import time
 
 import pymodbus.exceptions
-from com_port import COMConnector
 from common_fct import refresh_ports
-from motor_command import MotorCommand
-from input_registers import InputRegisters
-from holding_registers import HoldingRegisters
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 import pymodbus
 
-time_between_frame = 0.05
+time_between_frame = 0.1
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -86,6 +82,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.table_other: QtWidgets.QTableWidget = self.main_window.findChild(
             QtWidgets.QTableWidget, "table_other"
         )
+        self.table_hold_regi_1: QtWidgets.QTableWidget = self.main_window.findChild(
+            QtWidgets.QTableWidget, "table_holdRegi1"
+        )
+        self.table_hold_regi_2: QtWidgets.QTableWidget = self.main_window.findChild(
+            QtWidgets.QTableWidget, "table_holdRegi2"
+        )
 
     def set_connection(self) -> None:
         """Define the connections fot the Q objects"""
@@ -156,7 +158,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 time.sleep(time_between_frame)
                 self.read_holding_registers()
             except Exception as e:
-                self.label_consol.setText(self.label_consol.text() + "\n" + f"Failed to read data: {e}")
+                self.label_consol.setText(
+                    self.label_consol.text() + "\n" + f"Failed to read data: {e}"
+                )
                 self.polling = False
 
     def start_cmd(self) -> None:
@@ -192,17 +196,29 @@ class MainWindow(QtWidgets.QMainWindow):
             try:
                 response = self.modbus_client.write_register(0, command, unit=1)
                 if not response.isError():
-                    self.label_consol.setText(self.label_consol.text() + "\n" +f"Command {command} sent successfully"
+                    self.label_consol.setText(
+                        self.label_consol.text()
+                        + "\n"
+                        + f"Command {command} sent successfully"
                     )
                 else:
-                    self.label_consol.setText(self.label_consol.text() + "\n" +f"Error sending command {command}: {response}"
+                    self.label_consol.setText(
+                        self.label_consol.text()
+                        + "\n"
+                        + f"Error sending command {command}: {response}"
                     )
             except pymodbus.exceptions.ModbusException as e:
-                self.label_consol.setText(self.label_consol.text() + "\n" + f"Modbus Exception: {e}")
+                self.label_consol.setText(
+                    self.label_consol.text() + "\n" + f"Modbus Exception: {e}"
+                )
             except Exception as e:
-                self.label_consol.setText(self.label_consol.text() + "\n" + f"Failed to send command: {e}")
+                self.label_consol.setText(
+                    self.label_consol.text() + "\n" + f"Failed to send command: {e}"
+                )
         else:
-            self.label_consol.setText(self.label_consol.text() + "\n" + "Not connected to any port")
+            self.label_consol.setText(
+                self.label_consol.text() + "\n" + "Not connected to any port"
+            )
 
     def read_input_register(self) -> None:
         """Read the input registers to write them in the corresponding table"""
@@ -226,7 +242,9 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.label_motStatus.setText("Error reading Motor Status")
 
-    def set_table_value(self, input_list: List[int], table: QtWidgets.QTableWidget) -> None:
+    def set_table_value(
+        self, input_list: List[int], table: QtWidgets.QTableWidget
+    ) -> None:
         """Set the value in the Input register table"""
         for i, idx in enumerate(input_list):
             gain = 10
@@ -264,9 +282,10 @@ class MainWindow(QtWidgets.QMainWindow):
             17: "complete",
         }
         return status_mapping.get(status_code, "Unknown Status")
-    
+
     def read_holding_registers(self) -> None:
         """Read the holding register"""
+
 
 # if __name__ == "__main__":
 app = QApplication(sys.argv)
