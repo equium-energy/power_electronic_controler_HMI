@@ -31,6 +31,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.main_window)
         self.set_ports()
         self.set_connection()
+        self.customize_table()
 
     def get_ui_element(self) -> None:
         """Access UI elements"""
@@ -88,6 +89,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.table_hold_regi_2: QtWidgets.QTableWidget = self.main_window.findChild(
             QtWidgets.QTableWidget, "table_holdRegi2"
         )
+
+    def customize_table(self) -> None:
+        """Customize the Input and Holding register tables"""
+        self.table_temp.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.table_motor1.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.table_motor2.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.table_power.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.table_other.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 
     def set_connection(self) -> None:
         """Define the connections fot the Q objects"""
