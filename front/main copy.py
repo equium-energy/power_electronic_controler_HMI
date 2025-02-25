@@ -30,7 +30,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """Initialize the window"""
         self.get_ui_element()
         self.setCentralWidget(self.main_window)
-        refresh_ports(self.comboBox_ComPorts)
+        self.set_ports()
         self.set_connection()
 
     def get_ui_element(self) -> None:
@@ -71,6 +71,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_connection(self) -> None:
         """Define the connections fot the Q objects"""
+        self.comboBox_ComPorts.activated.connect(self.set_port)
         self.pushButton_connect.clicked.connect(self.connect_to_port)
         self.pushButton_start.clicked.connect(self.start_cmd)
         self.pushButton_stop.clicked.connect(self.stop_cmd)
@@ -79,6 +80,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.pushButton_suspend.clicked.connect(self.suspend_cmd)
         self.pushButton_unsuspend.clicked.connect(self.unsuspend_cmd)
         self.pushButton_reset.clicked.connect(self.reset_cmd)
+
+    def set_ports(self) -> None:
+        """Call functtion to refresh the ports"""
+        refresh_ports(self.comboBox_ComPorts)
 
     def connect_to_port(self) -> None:
         """Connection to the port for COM Port ComboBox"""
