@@ -10,7 +10,7 @@ from common_fct import refresh_ports
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 import pymodbus
 
-time_between_frame = 0.1
+time_between_frame = 0.05
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -309,6 +309,26 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def read_holding_registers(self) -> None:
         """Read the holding register"""
+        list_reg1 = [1001, 1002, 1003, 1004, 1005, 1006]
+        self.set_holding_registers(list_reg1, self.table_hold_regi_1)
+        list_reg2 = [1007, 1008, 1000, 1009, 1010, 1011]
+        self.set_holding_registers(list_reg2, self.table_hold_regi_2)
+        
+    def set_holding_registers(self, list_reg: List[int], table: QtWidgets.QTableWidget) -> None:
+        """Set the input in the table"""
+        for i, idx in enumerate(list_reg):
+            holding_reg = self.modbus_client.read_holding_registers(
+                idx, 1, unit=1
+            )
+            if not holding_reg.isError():
+                holding_reg_value = holding_reg.registers[0]
+                holding_reg_frq = str(holding_reg_value / 10)
+                table.setItem(0, i + 1, QtWidgets.QTableWidgetItem(holding_reg_frq))
+            else:
+                table.setItem(0, i + 1, QtWidgets.QTableWidgetItem("Error"))
+            time.sleep(time_between_frame)
+        self.disable_row(table, 0)
+        time.sleep(time_between_frame)
 
 
 # if __name__ == "__main__":
