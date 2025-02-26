@@ -364,10 +364,14 @@ class MainWindow(QtWidgets.QMainWindow):
         """Write holding registers in the write table"""
         if row != 0:
             if self.modbus_client and self.modbus_client.is_socket_open():
-                value = int(table.item(row, col)) * 10
+                try:
+                    value = int(table.item(row, col))
+                except:
+                    self.label_consol.setText("Invalid input")
+                value_to_write = int(value) * 10
                 time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(
-                    dict_col[col], value, unit=1
+                    dict_col[col], value_to_write, unit=1
                 )
                 if response.isError():
                     self.label_consol.setText("Error writing")
