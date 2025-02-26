@@ -97,6 +97,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.table_motor2.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.table_power.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.table_other.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.set_table_size(self.table_other, {2: 150})
+        self.set_table_size(self.table_hold_regi_1, {2: 150, 3: 150})
+        self.set_table_size(self.table_hold_regi_2, {0: 120, 2: 80, 6: 85})
+
+    def set_table_size(self, table: QtWidgets.QTableWidget, col_size: dict[int, int]) -> None:
+        """Define the size of the column of the table"""
+        for x, y in col_size.items():
+            table.setColumnWidth(x, y)
+
+    def disable_row(self, table: QtWidgets.QTableWidget, row: int) -> None:
+        """Disable editing a specific row in the selected table"""
+        for col in range(table.colorCount()):
+            item = table.item(row, col)
+            if item:
+                item.setFlags(item.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
 
     def set_connection(self) -> None:
         """Define the connections fot the Q objects"""
