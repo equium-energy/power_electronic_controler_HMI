@@ -1,5 +1,6 @@
 from PySide6 import QtWidgets
-import serial
+
+import serial.tools.list_ports
 
 
 def refresh_ports(element: QtWidgets.QComboBox) -> None:
