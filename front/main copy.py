@@ -101,7 +101,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_table_size(self.table_hold_regi_1, {2: 150, 3: 150})
         self.set_table_size(self.table_hold_regi_2, {0: 120, 2: 80, 6: 85})
 
-    def set_table_size(self, table: QtWidgets.QTableWidget, col_size: dict[int, int]) -> None:
+    def set_table_size(
+        self, table: QtWidgets.QTableWidget, col_size: dict[int, int]
+    ) -> None:
         """Define the size of the column of the table"""
         for x, y in col_size.items():
             table.setColumnWidth(x, y)
@@ -124,6 +126,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.pushButton_suspend.clicked.connect(self.suspend_cmd)
         self.pushButton_unsuspend.clicked.connect(self.unsuspend_cmd)
         self.pushButton_reset.clicked.connect(self.reset_cmd)
+        self.table_hold_regi_1.cellChanged.connect(self.write_holding_register1)
+        self.table_hold_regi_2.cellChanged.connect(self.write_holding_register2)
 
     def set_ports(self) -> None:
         """Call functtion to refresh the ports"""
@@ -311,15 +315,15 @@ class MainWindow(QtWidgets.QMainWindow):
         """Read the holding register"""
         list_reg1 = [1001, 1002, 1003, 1004, 1005, 1006]
         self.set_holding_registers(list_reg1, self.table_hold_regi_1)
-        list_reg2 = [1007, 1008, 1000, 1009, 1010, 1011]
+        list_reg2 = [1007, 1008, 1000, 1009, 1010, 1011, 2]
         self.set_holding_registers(list_reg2, self.table_hold_regi_2)
-        
-    def set_holding_registers(self, list_reg: List[int], table: QtWidgets.QTableWidget) -> None:
+
+    def set_holding_registers(
+        self, list_reg: List[int], table: QtWidgets.QTableWidget
+    ) -> None:
         """Set the input in the table"""
         for i, idx in enumerate(list_reg):
-            holding_reg = self.modbus_client.read_holding_registers(
-                idx, 1, unit=1
-            )
+            holding_reg = self.modbus_client.read_holding_registers(idx, 1, unit=1)
             if not holding_reg.isError():
                 holding_reg_value = holding_reg.registers[0]
                 holding_reg_frq = str(holding_reg_value / 10)
@@ -329,6 +333,46 @@ class MainWindow(QtWidgets.QMainWindow):
             time.sleep(time_between_frame)
         self.disable_row(table, 0)
         time.sleep(time_between_frame)
+
+    def write_holding_register1(self, row: int, col: int) -> None:
+        """Write and send the holding resgister"""
+        if row != 0:
+            dict_col = {
+                0: 1001,
+                1: 1002,
+                2: 1003,
+                3: 1004,
+                4: 1005,
+                5: 1006,
+            }
+            self.set_writing_hr(dict_col, self.table_hold_regi_1, row, col)
+
+    def write_holding_register2(self, row: int, col: int) -> None:
+        """Write and send the holding resgister"""
+        if row != 0:
+            dict_col = {
+                0: 1007,
+                1: 1008,
+                2: 1000,
+                3: 1009,
+                4: 1010,
+                5: 1011,
+            }
+            self.set_writing_hr(dict_col, self.table_hold_regi_2, row, col)
+
+    def set_writing_hr(self, dict_col: dict[int, int], table: QtWidgets.QTableWidget, row: int, col: int) -> None:
+        """Write holding registers in the write table"""
+        if row != 0:
+            if self.modbus_client and self.modbus_client.is_socket_open():
+                value = int(table.item(row, col)) * 10
+                time.sleep(time_between_frame)
+                response = self.modbus_client.write_register(
+                    dict_col[col], value, unit=1
+                )
+                if response.isError():
+                    self.label_consol.setText("Error writing")
+            else:
+                self.label_consol.setText("Not connected to any port")
 
 
 # if __name__ == "__main__":

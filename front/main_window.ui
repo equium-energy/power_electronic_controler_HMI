@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>877</width>
+    <width>917</width>
     <height>683</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>861</width>
+      <width>901</width>
       <height>646</height>
      </rect>
     </property>
@@ -494,32 +494,32 @@
            </column>
            <column>
             <property name="text">
-             <string>Position avg.</string>
+             <string>Position avg. [mm]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Position min.</string>
+             <string>Position min. [mm]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Position max.</string>
+             <string>Position max. [mm]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>AC Voltage</string>
+             <string>AC Voltage rms [V]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>AC Current</string>
+             <string>AC Current rms [A]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>DC Resistance</string>
+             <string>DC Resistance [Ohm]</string>
             </property>
            </column>
           </widget>
@@ -574,37 +574,37 @@
            </row>
            <column>
             <property name="text">
-             <string>Live freq.</string>
+             <string>Live freq. [Hz]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Position avg.</string>
+             <string>Position avg. [mm]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Position min.</string>
+             <string>Position min. [mm]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Position max.</string>
+             <string>Position max. [mm]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>AC Voltage</string>
+             <string>AC Voltage rms [V]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>AC Current</string>
+             <string>AC Current rms [A]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>DC Resistance</string>
+             <string>DC Resistance [Ohm]</string>
             </property>
            </column>
           </widget>
@@ -665,12 +665,12 @@
            </row>
            <column>
             <property name="text">
-             <string>Apparent</string>
+             <string>Apparent [VA]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Active</string>
+             <string>Active [W]</string>
             </property>
            </column>
           </widget>
@@ -725,17 +725,17 @@
            </row>
            <column>
             <property name="text">
-             <string>DC Bus voltage</string>
+             <string>DC Bus voltage [V]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Network freq.</string>
+             <string>Network freq. [Hz]</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Sweep resonance freq.</string>
+             <string>Sweep resonance freq. [Hz]</string>
             </property>
            </column>
           </widget>
@@ -771,11 +771,16 @@
      </item>
      <item>
       <widget class="QTableWidget" name="table_holdRegi1">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
        <attribute name="horizontalHeaderMinimumSectionSize">
         <number>30</number>
        </attribute>
        <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>120</number>
+        <number>122</number>
        </attribute>
        <attribute name="verticalHeaderMinimumSectionSize">
         <number>23</number>
@@ -795,43 +800,48 @@
        </row>
        <column>
         <property name="text">
-         <string>Nouvelle colonne</string>
+         <string>Max DC Bus Voltage [V]</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Nouvelle colonne</string>
+         <string>Min DC Bus Voltage [V]</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Nouvelle colonne</string>
+         <string>Max AC Voltage Motor 1 [A]</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Nouvelle colonne</string>
+         <string>Max AC Voltage Motor 2 [A]</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Nouvelle colonne</string>
+         <string>AC Current Motor 1 [A]</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Nouvelle colonne</string>
+         <string>AC Current Motor 2 [A]</string>
         </property>
        </column>
       </widget>
      </item>
      <item>
       <widget class="QTableWidget" name="table_holdRegi2">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
        <attribute name="horizontalHeaderMinimumSectionSize">
         <number>30</number>
        </attribute>
        <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>120</number>
+        <number>122</number>
        </attribute>
        <attribute name="verticalHeaderMinimumSectionSize">
         <number>23</number>
@@ -851,32 +861,37 @@
        </row>
        <column>
         <property name="text">
-         <string>Nouvelle colonne</string>
+         <string>Max MCU Temp. [°C]</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Nouvelle colonne</string>
+         <string>Max Radiator Temp. [°C]</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Nouvelle colonne</string>
+         <string>Initial freq. [Hz]</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Nouvelle colonne</string>
+         <string>Sweep Min. freq. [Hz]</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Nouvelle colonne</string>
+         <string>Sweep Max. freq. [Hz]</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Nouvelle colonne</string>
+         <string>Sweep stabilization [ms]</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Modulation [%]</string>
         </property>
        </column>
       </widget>
