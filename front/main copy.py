@@ -10,7 +10,7 @@ from common_fct import refresh_ports
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 import pymodbus
 
-from table_creation import create_temp_table, create_motor_table, create_pow_table, create_other_table
+from table_creation import create_temp_table, create_motor_table, create_pow_table, create_other_table, create_holding_1, create_holding_2
 
 time_between_frame = 0.05
 
@@ -72,11 +72,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.pushButton_reset: QtWidgets.QPushButton = self.main_window.findChild(
             QtWidgets.QPushButton, "pushButton_reset"
         )
+        self.pushButton_refresh: QtWidgets.QPushButton = self.main_window.findChild(
+            QtWidgets.QPushButton, "pushButton_refresh"
+        )
+        self.pushButton_clean: QtWidgets.QPushButton = self.main_window.findChild(
+            QtWidgets.QPushButton, "pushButton_console"
+        )
         self.label_motStatus: QtWidgets.QLabel = self.main_window.findChild(
             QtWidgets.QLabel, "label_motStatus"
         )
         self.label_consol: QtWidgets.QLabel = self.main_window.findChild(
-            QtWidgets.QLabel, "label_consol"
+            QtWidgets.QLabel, "label_console"
         )
         self.table_temp: QtWidgets.QTableWidget = self.main_window.findChild(
             QtWidgets.QTableWidget, "table_temp"
@@ -110,17 +116,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_column_size(self.table_other, {2: 150})
         self.set_column_size(self.table_hold_regi_1, {2: 150, 3: 150})
         self.set_column_size(self.table_hold_regi_2, {0: 120, 2: 80, 6: 85})
-
+        # INPUT
         create_temp_table(self.table_temp)
         self.set_column_size(self.table_temp, {0: 80, 1: 80, 2: 80, 3: 80, 4: 80,5: 80, 6: 80})
-        # self.set_row_size(self.table_temp, {0: 50, 1: 50})
-
         create_motor_table(self.table_motor1)
         create_motor_table(self.table_motor2)
-
         create_pow_table(self.table_power)
-
         create_other_table(self.table_other)
+        # HOLDING
+        create_holding_1(self.table_hold_regi_1)
+        create_holding_2(self.table_hold_regi_2)
 
     def set_column_size(
         self, table: QtWidgets.QTableWidget, col_size: dict[int, int]
@@ -152,6 +157,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.pushButton_suspend.clicked.connect(self.suspend_cmd)
         self.pushButton_unsuspend.clicked.connect(self.unsuspend_cmd)
         self.pushButton_reset.clicked.connect(self.reset_cmd)
+        self.pushButton_refresh.clicked.connect(self.refresh_cmd)
+        self.pushButton_clean.clicked.connect(self.clean_console)
         self.table_hold_regi_1.cellChanged.connect(self.write_holding_register1)
         self.table_hold_regi_2.cellChanged.connect(self.write_holding_register2)
 
@@ -244,6 +251,15 @@ class MainWindow(QtWidgets.QMainWindow):
     def reset_cmd(self) -> None:
         """Start button signal"""
         self.send_command(7)
+
+    def refresh_cmd(self) -> None:
+        """Refresh command for COM"""
+        self.set_ports()
+
+    def clean_console(self) -> None:
+        """Clean the consol"""
+        self.label_consol.clear()
+
 
     def send_command(self, command: int):
         if self.modbus_client and self.modbus_client.is_socket_open():

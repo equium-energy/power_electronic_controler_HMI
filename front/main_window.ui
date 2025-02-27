@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>913</width>
-    <height>754</height>
+    <width>917</width>
+    <height>762</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -95,7 +95,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="pushButton_refresh">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
              <horstretch>0</horstretch>
@@ -311,12 +311,12 @@
             </font>
            </property>
            <property name="text">
-            <string>        Consol</string>
+            <string>        Console</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_consol">
+          <widget class="QLabel" name="label_console">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -325,6 +325,13 @@
            </property>
            <property name="text">
             <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_console">
+           <property name="text">
+            <string>Clean</string>
            </property>
           </widget>
          </item>
@@ -791,7 +798,7 @@
             <number>3</number>
            </attribute>
            <attribute name="verticalHeaderDefaultSectionSize">
-            <number>23</number>
+            <number>18</number>
            </attribute>
            <row>
             <property name="text">
@@ -861,6 +868,9 @@
          <pointsize>8</pointsize>
         </font>
        </property>
+       <attribute name="horizontalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
        <attribute name="horizontalHeaderMinimumSectionSize">
         <number>30</number>
        </attribute>
@@ -868,11 +878,21 @@
         <number>122</number>
        </attribute>
        <attribute name="verticalHeaderMinimumSectionSize">
-        <number>23</number>
+        <number>3</number>
        </attribute>
        <attribute name="verticalHeaderDefaultSectionSize">
-        <number>24</number>
+        <number>18</number>
        </attribute>
+       <row>
+        <property name="text">
+         <string/>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string/>
+        </property>
+       </row>
        <row>
         <property name="text">
          <string>Read</string>
@@ -885,32 +905,32 @@
        </row>
        <column>
         <property name="text">
-         <string>Max DC Bus Voltage [V]</string>
+         <string/>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Min DC Bus Voltage [V]</string>
+         <string/>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Max AC Voltage Motor 1 [A]</string>
+         <string/>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Max AC Voltage Motor 2 [A]</string>
+         <string/>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>AC Current Motor 1 [A]</string>
+         <string/>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>AC Current Motor 2 [A]</string>
+         <string/>
         </property>
        </column>
       </widget>
@@ -922,6 +942,9 @@
          <pointsize>8</pointsize>
         </font>
        </property>
+       <attribute name="horizontalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
        <attribute name="horizontalHeaderMinimumSectionSize">
         <number>30</number>
        </attribute>
@@ -929,11 +952,21 @@
         <number>122</number>
        </attribute>
        <attribute name="verticalHeaderMinimumSectionSize">
-        <number>23</number>
+        <number>2</number>
        </attribute>
        <attribute name="verticalHeaderDefaultSectionSize">
-        <number>23</number>
+        <number>18</number>
        </attribute>
+       <row>
+        <property name="text">
+         <string/>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string/>
+        </property>
+       </row>
        <row>
         <property name="text">
          <string>Read</string>
@@ -946,37 +979,37 @@
        </row>
        <column>
         <property name="text">
-         <string>Max MCU Temp. [°C]</string>
+         <string/>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Max Radiator Temp. [°C]</string>
+         <string/>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Initial freq. [Hz]</string>
+         <string/>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Sweep Min. freq. [Hz]</string>
+         <string/>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Sweep Max. freq. [Hz]</string>
+         <string/>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Sweep stabilization [ms]</string>
+         <string/>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Modulation [%]</string>
+         <string/>
         </property>
        </column>
       </widget>
