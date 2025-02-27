@@ -10,6 +10,8 @@ from common_fct import refresh_ports
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 import pymodbus
 
+from table_creation import create_temp_table, create_motor_table, create_pow_table, create_other_table
+
 time_between_frame = 0.05
 
 
@@ -32,6 +34,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_ports()
         self.set_connection()
         self.customize_table()
+        self.load_stylesheet()
+
+    def load_stylesheet(self) -> None:
+        """Loads the QSS file and applies it."""
+        file = QtCore.QFile("style.css")
+        if file.open(QtCore.QFile.ReadOnly | QtCore.QFile.Text):
+            qss = file.readAll().data().decode("utf-8")
+            self.setStyleSheet(qss)
 
     def get_ui_element(self) -> None:
         """Access UI elements"""
@@ -97,16 +107,32 @@ class MainWindow(QtWidgets.QMainWindow):
         self.table_motor2.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.table_power.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.table_other.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        self.set_table_size(self.table_other, {2: 150})
-        self.set_table_size(self.table_hold_regi_1, {2: 150, 3: 150})
-        self.set_table_size(self.table_hold_regi_2, {0: 120, 2: 80, 6: 85})
+        self.set_column_size(self.table_other, {2: 150})
+        self.set_column_size(self.table_hold_regi_1, {2: 150, 3: 150})
+        self.set_column_size(self.table_hold_regi_2, {0: 120, 2: 80, 6: 85})
 
-    def set_table_size(
+        create_temp_table(self.table_temp)
+        self.set_column_size(self.table_temp, {0: 80, 1: 80, 2: 80, 3: 80, 4: 80,5: 80, 6: 80})
+        # self.set_row_size(self.table_temp, {0: 50, 1: 50})
+
+        create_motor_table(self.table_motor1)
+        create_motor_table(self.table_motor2)
+
+        create_pow_table(self.table_power)
+
+        create_other_table(self.table_other)
+
+    def set_column_size(
         self, table: QtWidgets.QTableWidget, col_size: dict[int, int]
     ) -> None:
         """Define the size of the column of the table"""
         for x, y in col_size.items():
             table.setColumnWidth(x, y)
+
+    def set_row_size(self, table: QtWidgets.QTableWidget, row_size: dict[int, int]) -> None:
+        """Define the row height of a table"""
+        for x, y in row_size.items():
+            table.setRowHeight(x, y)
 
     def disable_row(self, table: QtWidgets.QTableWidget, row: int) -> None:
         """Disable editing a specific row in the selected table"""
@@ -281,10 +307,10 @@ class MainWindow(QtWidgets.QMainWindow):
             input_reg = self.modbus_client.read_input_registers(idx, 1, unit=1)
             if not input_reg.isError():
                 val_for_table = str(input_reg.registers[0] / gain)
-                table.setItem(0, i, QtWidgets.QTableWidgetItem(val_for_table))
+                table.setItem(2, i, QtWidgets.QTableWidgetItem(val_for_table))
                 time.sleep(time_between_frame)
             else:
-                table.setItem(0, i, QtWidgets.QTableWidgetItem("Error"))
+                table.setItem(2, i, QtWidgets.QTableWidgetItem("Error"))
         time.sleep(time_between_frame)
 
     def convert_motor_status(self, status_code) -> dict[int, str]:

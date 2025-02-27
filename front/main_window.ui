@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>917</width>
-    <height>683</height>
+    <width>913</width>
+    <height>754</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,10 +17,10 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
+      <x>0</x>
+      <y>0</y>
       <width>901</width>
-      <height>646</height>
+      <height>731</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -91,6 +91,19 @@
            </property>
            <property name="text">
             <string>Connect</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Refresh</string>
            </property>
           </widget>
          </item>
@@ -385,7 +398,7 @@
             <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
            </property>
            <attribute name="horizontalHeaderVisible">
-            <bool>true</bool>
+            <bool>false</bool>
            </attribute>
            <attribute name="horizontalHeaderDefaultSectionSize">
             <number>120</number>
@@ -393,9 +406,22 @@
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
            </attribute>
-           <attribute name="verticalHeaderDefaultSectionSize">
-            <number>23</number>
+           <attribute name="verticalHeaderMinimumSectionSize">
+            <number>5</number>
            </attribute>
+           <attribute name="verticalHeaderDefaultSectionSize">
+            <number>18</number>
+           </attribute>
+           <row>
+            <property name="text">
+             <string/>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string/>
+            </property>
+           </row>
            <row>
             <property name="text">
              <string/>
@@ -403,32 +429,32 @@
            </row>
            <column>
             <property name="text">
-             <string>Radiator live [°C]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Radiator min. [°C]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Radiator max. [°C]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>MCU live [°C]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>MCU min. [°C]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>MCU max. [°C]</string>
+             <string/>
             </property>
            </column>
           </widget>
@@ -470,6 +496,9 @@
            <property name="sizeAdjustPolicy">
             <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
            </property>
+           <attribute name="horizontalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
            <attribute name="horizontalHeaderCascadingSectionResizes">
             <bool>true</bool>
            </attribute>
@@ -479,9 +508,22 @@
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
            </attribute>
-           <attribute name="verticalHeaderDefaultSectionSize">
-            <number>23</number>
+           <attribute name="verticalHeaderMinimumSectionSize">
+            <number>3</number>
            </attribute>
+           <attribute name="verticalHeaderDefaultSectionSize">
+            <number>18</number>
+           </attribute>
+           <row>
+            <property name="text">
+             <string/>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string/>
+            </property>
+           </row>
            <row>
             <property name="text">
              <string/>
@@ -489,37 +531,37 @@
            </row>
            <column>
             <property name="text">
-             <string>Live freq. [Hz]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Position avg. [mm]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Position min. [mm]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Position max. [mm]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>AC Voltage rms [V]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>AC Current rms [A]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>DC Resistance [Ohm]</string>
+             <string/>
             </property>
            </column>
           </widget>
@@ -558,15 +600,31 @@
            <property name="sizeAdjustPolicy">
             <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
            </property>
+           <attribute name="horizontalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
            <attribute name="horizontalHeaderDefaultSectionSize">
             <number>120</number>
            </attribute>
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
            </attribute>
-           <attribute name="verticalHeaderDefaultSectionSize">
-            <number>23</number>
+           <attribute name="verticalHeaderMinimumSectionSize">
+            <number>3</number>
            </attribute>
+           <attribute name="verticalHeaderDefaultSectionSize">
+            <number>18</number>
+           </attribute>
+           <row>
+            <property name="text">
+             <string/>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Nouvelle ligne</string>
+            </property>
+           </row>
            <row>
             <property name="text">
              <string/>
@@ -574,37 +632,37 @@
            </row>
            <column>
             <property name="text">
-             <string>Live freq. [Hz]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Position avg. [mm]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Position min. [mm]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Position max. [mm]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>AC Voltage rms [V]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>AC Current rms [A]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>DC Resistance [Ohm]</string>
+             <string/>
             </property>
            </column>
           </widget>
@@ -649,15 +707,26 @@
            <property name="sizeAdjustPolicy">
             <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
            </property>
+           <attribute name="horizontalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
            <attribute name="horizontalHeaderDefaultSectionSize">
             <number>120</number>
            </attribute>
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
            </attribute>
-           <attribute name="verticalHeaderDefaultSectionSize">
-            <number>23</number>
+           <attribute name="verticalHeaderMinimumSectionSize">
+            <number>3</number>
            </attribute>
+           <attribute name="verticalHeaderDefaultSectionSize">
+            <number>18</number>
+           </attribute>
+           <row>
+            <property name="text">
+             <string/>
+            </property>
+           </row>
            <row>
             <property name="text">
              <string/>
@@ -665,12 +734,12 @@
            </row>
            <column>
             <property name="text">
-             <string>Apparent [VA]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Active [W]</string>
+             <string/>
             </property>
            </column>
           </widget>
@@ -709,11 +778,17 @@
            <property name="sizeAdjustPolicy">
             <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
            </property>
+           <attribute name="horizontalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
            <attribute name="horizontalHeaderDefaultSectionSize">
             <number>120</number>
            </attribute>
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
+           </attribute>
+           <attribute name="verticalHeaderMinimumSectionSize">
+            <number>3</number>
            </attribute>
            <attribute name="verticalHeaderDefaultSectionSize">
             <number>23</number>
@@ -723,19 +798,29 @@
              <string/>
             </property>
            </row>
+           <row>
+            <property name="text">
+             <string>Nouvelle ligne</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string/>
+            </property>
+           </row>
            <column>
             <property name="text">
-             <string>DC Bus voltage [V]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Network freq. [Hz]</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Sweep resonance freq. [Hz]</string>
+             <string/>
             </property>
            </column>
           </widget>
