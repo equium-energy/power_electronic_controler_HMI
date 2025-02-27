@@ -327,9 +327,9 @@ class MainWindow(QtWidgets.QMainWindow):
             if not holding_reg.isError():
                 holding_reg_value = holding_reg.registers[0]
                 holding_reg_frq = str(holding_reg_value / 10)
-                table.setItem(0, i + 1, QtWidgets.QTableWidgetItem(holding_reg_frq))
+                table.setItem(0, i, QtWidgets.QTableWidgetItem(holding_reg_frq))
             else:
-                table.setItem(0, i + 1, QtWidgets.QTableWidgetItem("Error"))
+                table.setItem(0, i, QtWidgets.QTableWidgetItem("Error"))
             time.sleep(time_between_frame)
         self.disable_row(table, 0)
         time.sleep(time_between_frame)
