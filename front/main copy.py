@@ -1,6 +1,6 @@
 import sys
 from typing import List
-from PySide6 import QtWidgets, QtCore, QtUiTools
+from PySide6 import QtWidgets, QtCore, QtUiTools, QtGui
 from PySide6.QtWidgets import QApplication
 import threading
 import time
@@ -19,7 +19,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         loader = QtUiTools.QUiLoader()
-        ui_file = QtCore.QFile("front/main_window.ui")
+        ui_file = QtCore.QFile("front/main_window_img.ui")
         ui_file.open(QtCore.QFile.ReadOnly)
         self.main_window = loader.load(ui_file, self)
         ui_file.close()
@@ -34,14 +34,22 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_ports()
         self.set_connection()
         self.customize_table()
-        self.load_stylesheet()
+        self.set_menu()
 
-    def load_stylesheet(self) -> None:
-        """Loads the QSS file and applies it."""
-        file = QtCore.QFile("style.css")
-        if file.open(QtCore.QFile.ReadOnly | QtCore.QFile.Text):
-            qss = file.readAll().data().decode("utf-8")
-            self.setStyleSheet(qss)
+    def set_menu(self) -> None:
+        """Set the menu bar to add help section"""
+        about_action = QtGui.QAction("Print packML", self)
+        about_action.triggered.connect(self.show_about)
+        self.menu_help.addAction(about_action)
+
+    def show_about(self) -> None:
+        msg_box = QtWidgets.QMessageBox(self)
+        msg_box.setWindowTitle("pack ML")
+        # Load and set an image
+        pixmap = QtGui.QPixmap("./front/pack_ml.jpg")  # Replace with your image path
+        print(pixmap)
+        msg_box.setIconPixmap(pixmap)
+        msg_box.exec()
 
     def get_ui_element(self) -> None:
         """Access UI elements"""
@@ -104,6 +112,9 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         self.table_hold_regi_2: QtWidgets.QTableWidget = self.main_window.findChild(
             QtWidgets.QTableWidget, "table_holdRegi2"
+        )
+        self.menu_help: QtWidgets.QMenu = self.main_window.findChild(
+            QtWidgets.QMenu, "menuHelp"
         )
 
     def customize_table(self) -> None:
@@ -425,4 +436,4 @@ class MainWindow(QtWidgets.QMainWindow):
 app = QApplication(sys.argv)
 window = MainWindow()
 window.main_window.show()
-app.exec()
+sys.exit(app.exec())
