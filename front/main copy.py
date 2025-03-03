@@ -229,6 +229,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.read_input_register()
                 time.sleep(time_between_frame)
                 self.read_holding_registers()
+                self.read_protection()
             except Exception as e:
                 self.label_consol.setText(
                     self.label_consol.text() + "\n" + f"Failed to read data: {e}"
@@ -431,8 +432,12 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.label_consol.setText("Not connected to any port")
 
+    def read_protection(self) -> None:
+        """Read the protection and add them to the console"""
+        if self.modbus_client and self.modbus_client.is_socket_open():
+            code_alarm = self.modbus_client.read_input_registers(100, 1, unit=1)
 
-# if __name__ == "__main__":
+
 app = QApplication(sys.argv)
 window = MainWindow()
 window.main_window.show()
