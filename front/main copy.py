@@ -159,7 +159,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_connection(self) -> None:
         """Define the connections fot the Q objects"""
-        self.comboBox_ComPorts.activated.connect(self.set_ports)
         self.pushButton_connect.clicked.connect(self.connect_to_port)
         self.pushButton_start.clicked.connect(self.start_cmd)
         self.pushButton_stop.clicked.connect(self.stop_cmd)
@@ -381,9 +380,9 @@ class MainWindow(QtWidgets.QMainWindow):
             if not holding_reg.isError():
                 holding_reg_value = holding_reg.registers[0]
                 holding_reg_frq = str(holding_reg_value / 10)
-                table.setItem(0, i, QtWidgets.QTableWidgetItem(holding_reg_frq))
+                table.setItem(2, i, QtWidgets.QTableWidgetItem(holding_reg_frq))
             else:
-                table.setItem(0, i, QtWidgets.QTableWidgetItem("Error"))
+                table.setItem(2, i, QtWidgets.QTableWidgetItem("Error"))
             time.sleep(time_between_frame)
         self.disable_row(table, 0)
         time.sleep(time_between_frame)
@@ -416,13 +415,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_writing_hr(self, dict_col: dict[int, int], table: QtWidgets.QTableWidget, row: int, col: int) -> None:
         """Write holding registers in the write table"""
-        if row != 0:
+        if row == 3:
             if self.modbus_client and self.modbus_client.is_socket_open():
                 try:
-                    value = int(table.item(row, col))
+                    value = int(table.item(row, col).text())
                 except:
                     self.label_consol.setText("Invalid input")
-                value_to_write = int(value) * 10
+                value_to_write = value * 10
                 time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(
                     dict_col[col], value_to_write, unit=1
