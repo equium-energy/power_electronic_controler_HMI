@@ -17,8 +17,7 @@ QPushButton:hover {
 }
 
 QPushButton:pressed {
-    background-color: #909090; /* Even darker grey when pressed */
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+    background-color: #909090;
 }
 
 QComboBox {
@@ -27,7 +26,7 @@ QComboBox {
     border-radius: 1px;  /* Rounded corners */
     padding: 1px 18px 1px 3px;  /* Padding inside */
     font-size: 10pt;  /* Slightly larger font */
-    color: #333;  /* Dark grey text */
+    color: #333;
 }
 
 QComboBox:hover {

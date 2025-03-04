@@ -6,11 +6,11 @@ import threading
 import time
 
 import pymodbus.exceptions
-from common_fct import refresh_ports
+from front.common_fct import refresh_ports
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 import pymodbus
 
-from table_creation import create_temp_table, create_motor_table, create_pow_table, create_other_table, create_holding_1, create_holding_2
+from front.table_creation import create_temp_table, create_motor_table, create_pow_table, create_other_table, create_holding_1, create_holding_2
 
 time_between_frame = 0.05
 
@@ -19,12 +19,13 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         loader = QtUiTools.QUiLoader()
-        ui_file = QtCore.QFile("front/main_window.ui")
+        ui_file = QtCore.QFile("./front/style/main_window.ui")
         ui_file.open(QtCore.QFile.ReadOnly)
         self.main_window = loader.load(ui_file, self)
         ui_file.close()
         self.modbus_client = None
         self.polling = False
+        self.log_lines = []
         self.initialize_window()
 
     def initialize_window(self) -> None:
@@ -53,7 +54,7 @@ class MainWindow(QtWidgets.QMainWindow):
         msg_box = QtWidgets.QMessageBox(self)
         msg_box.setWindowTitle("pack ML")
         # Load and set an image
-        pixmap = QtGui.QPixmap("./front/pack_ml.jpg")  # Replace with your image path
+        pixmap = QtGui.QPixmap("./front/style/pack_ml.jpg")  # Replace with your image path
         print(pixmap)
         msg_box.setIconPixmap(pixmap)
         msg_box.exec()
@@ -226,6 +227,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.label_consol.setText(
                 self.label_consol.text() + "\n" + "Not connected to any port"
             )
+
+    def add_console_line(self, message: str) -> None:
+        """Add message in the line and erase the other ones"""
+        message = self.label_consol.text() + "\n" + message
 
     def poll_data(self) -> None:
         """Poll the data from input and golding registers"""
@@ -443,9 +448,34 @@ class MainWindow(QtWidgets.QMainWindow):
         """Read the protection and add them to the console"""
         if self.modbus_client and self.modbus_client.is_socket_open():
             code_alarm = self.modbus_client.read_input_registers(100, 1, unit=1)
+            if code_alarm:
+                self.set_code_alarm(code_alarm.registers[0])
+            code_warning = self.modbus_client.read_input_registers(101, 1, unit=1)
+            print(f"code warning {code_warning.registers[0]}")
 
+    def set_code_alarm(self, code_alarm: int) -> None:
+        """Set the code alarm"""
+        dict_code_alarm = {
+            0: "EVENT_V_BUS_MAX",
+            1: "EVENT_V_BUS_MIN",
+            2: "EVENT_V_MOTOR1_MAX",
+            3: "EVENT_V_MOTOR2_MAX",
+            4: "EVENT_I_MOTOR1_MAX",
+            5: "EVENT_I_MOTOR2_MAX",
+            6: "EVENT_T_MCU_MAX",
+            7: "EVENT_T_HEATSINK_MAX",
+        }
+        self.label_consol.setText(self.label_consol.text() + "\n" + dict_code_alarm[code_alarm])
 
-app = QApplication(sys.argv)
-window = MainWindow()
-window.main_window.show()
-sys.exit(app.exec())
+    def set_code_warning(self, code_warning: int) -> None:
+        """Set the code warning in message box"""
+        dict_code_alarm = {
+            0: "V_BUS_MAX",
+            1: "V_BUS_MIN",
+            2: "V_MOTOR1_MAX",
+            3: "V_MOTOR2_MAX",
+            4: "I_MOTOR1_MAX",
+            5: "I_MOTOR2_MAX",
+            6: "T_MCU_MAX",
+            7: "T_HEATSINK_MAX",
+        }
