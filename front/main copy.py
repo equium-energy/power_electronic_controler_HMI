@@ -35,12 +35,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_connection()
         self.customize_table()
         self.set_menu()
+        self.set_style()
 
     def set_menu(self) -> None:
         """Set the menu bar to add help section"""
         about_action = QtGui.QAction("Print packML", self)
         about_action.triggered.connect(self.show_about)
         self.menu_help.addAction(about_action)
+
+    def set_style(self) -> None:
+        """Set the style of the main window"""
+        with open('./front/style/style.css') as f:
+            css_file = f.read()
+        self.setStyleSheet(css_file)
 
     def show_about(self) -> None:
         msg_box = QtWidgets.QMessageBox(self)
@@ -420,16 +427,17 @@ class MainWindow(QtWidgets.QMainWindow):
                 try:
                     value = int(table.item(row, col).text())
                 except:
-                    self.label_consol.setText("Invalid input")
+                    self.label_consol.setText(self.label_consol.text() + "\n" + "Invalid input")
+                    return
                 value_to_write = value * 10
                 time.sleep(time_between_frame)
                 response = self.modbus_client.write_register(
                     dict_col[col], value_to_write, unit=1
                 )
                 if response.isError():
-                    self.label_consol.setText("Error writing")
+                    self.label_consol.setText(self.label_consol.text() + "\n" + "Error writing")
             else:
-                self.label_consol.setText("Not connected to any port")
+                self.label_consol.setText(self.label_consol.text() + "\n" + "Not connected to any port")
 
     def read_protection(self) -> None:
         """Read the protection and add them to the console"""

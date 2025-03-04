@@ -1,0 +1,50 @@
+QWidget {
+    background-color: white;
+    color: black; /* Optional: Set text color to black for contrast */
+}
+
+QPushButton {
+    background-color: #d3d3d3; /* Light grey */
+    border: .5px solid black;
+    border-radius: 5px;
+    padding: 2px 20px;
+    font-size: 10px;
+    color: black;
+}
+
+QPushButton:hover {
+    background-color: #A0A0A0; /* Slightly darker grey */
+}
+
+QPushButton:pressed {
+    background-color: #909090; /* Even darker grey when pressed */
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+QComboBox {
+    background-color: #f0f0f0;  /* Light grey background */
+    border: 0.5px solid black;  /* Black border */
+    border-radius: 1px;  /* Rounded corners */
+    padding: 1px 18px 1px 3px;  /* Padding inside */
+    font-size: 10pt;  /* Slightly larger font */
+    color: #333;  /* Dark grey text */
+}
+
+QComboBox:hover {
+    background-color: #e0e0e0;  /* Slightly darker grey on hover */
+}
+
+QComboBox:on { /* shift the text when the popup opens */
+    padding-top: 3px;
+    padding-left: 4px;
+}
+
+QMenu {
+    background-color: #919191;
+    color:  #ffffff;
+}
+
+QMenu:selected {
+    background-color: #cecece;
+    color: #000000
+}
