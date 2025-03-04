@@ -19,7 +19,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         loader = QtUiTools.QUiLoader()
-        ui_file = QtCore.QFile("front/main_window_img.ui")
+        ui_file = QtCore.QFile("front/main_window.ui")
         ui_file.open(QtCore.QFile.ReadOnly)
         self.main_window = loader.load(ui_file, self)
         ui_file.close()
