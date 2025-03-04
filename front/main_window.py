@@ -199,24 +199,14 @@ class MainWindow(QtWidgets.QMainWindow):
                     timeout=1,
                 )
                 if self.modbus_client.connect():
-                    self.label_consol.setText(
-                        self.label_consol.text() + "\n" + f"Connected to {current_port}"
-                    )
+                    self.add_console_line(f"Connected to {current_port}")
                     self.start_polling()
                 else:
-                    self.label_consol.setText(
-                        self.label_consol.text()
-                        + "\n"
-                        + f"Failed to connect to {current_port}"
-                    )
+                    self.add_console_line(f"Failed to connect to {current_port}")
             except Exception as e:
-                self.label_consol.setText(
-                    self.label_consol.text() + "\n" + f"Failed to connect: {e}"
-                )
+                self.add_console_line(f"Failed to connect: {e}")
         else:
-            self.label_consol.setText(
-                self.label_consol.text() + "\n" + "No port selected"
-            )
+            self.add_console_line("No port selected")
 
     def start_polling(self) -> None:
         """Start the polling after the connection"""
@@ -224,13 +214,15 @@ class MainWindow(QtWidgets.QMainWindow):
             self.polling = True
             threading.Thread(target=self.poll_data).start()
         else:
-            self.label_consol.setText(
-                self.label_consol.text() + "\n" + "Not connected to any port"
-            )
+            self.add_console_line("Not connected to any port")
 
     def add_console_line(self, message: str) -> None:
         """Add message in the line and erase the other ones"""
-        message = self.label_consol.text() + "\n" + message
+        self.log_lines.append(message)
+        print(f"message test {self.log_lines} length {len(self.log_lines)}")
+        if len(self.log_lines) > 6:
+            self.log_lines.pop(0)
+        self.label_consol.setText("\n".join(self.log_lines))
 
     def poll_data(self) -> None:
         """Poll the data from input and golding registers"""
@@ -242,9 +234,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.read_holding_registers()
                 self.read_protection()
             except Exception as e:
-                self.label_consol.setText(
-                    self.label_consol.text() + "\n" + f"Failed to read data: {e}"
-                )
+                self.add_console_line(f"Failed to read data: {e}")
                 self.polling = False
 
     def start_cmd(self) -> None:
@@ -282,6 +272,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def clean_console(self) -> None:
         """Clean the consol"""
         self.label_consol.clear()
+        self.log_lines = []
 
 
     def send_command(self, command: int):
@@ -289,29 +280,15 @@ class MainWindow(QtWidgets.QMainWindow):
             try:
                 response = self.modbus_client.write_register(0, command, unit=1)
                 if not response.isError():
-                    self.label_consol.setText(
-                        self.label_consol.text()
-                        + "\n"
-                        + f"Command {command} sent successfully"
-                    )
+                    self.add_console_line(f"Command {command} sent successfully")
                 else:
-                    self.label_consol.setText(
-                        self.label_consol.text()
-                        + "\n"
-                        + f"Error sending command {command}: {response}"
-                    )
+                    self.add_console_line(f"Error sending command {command}: {response}")
             except pymodbus.exceptions.ModbusException as e:
-                self.label_consol.setText(
-                    self.label_consol.text() + "\n" + f"Modbus Exception: {e}"
-                )
+                self.add_console_line(f"Modbus Exception: {e}")
             except Exception as e:
-                self.label_consol.setText(
-                    self.label_consol.text() + "\n" + f"Failed to send command: {e}"
-                )
+                self.add_console_line(f"Failed to send command: {e}")
         else:
-            self.label_consol.setText(
-                self.label_consol.text() + "\n" + "Not connected to any port"
-            )
+            self.add_console_line("Not connected to any port")
 
     def read_input_register(self) -> None:
         """Read the input registers to write them in the corresponding table"""
@@ -432,7 +409,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 try:
                     value = int(table.item(row, col).text())
                 except:
-                    self.label_consol.setText(self.label_consol.text() + "\n" + "Invalid input")
+                    self.add_console_line("Invalid input")
                     return
                 value_to_write = value * 10
                 time.sleep(time_between_frame)
@@ -440,9 +417,9 @@ class MainWindow(QtWidgets.QMainWindow):
                     dict_col[col], value_to_write, unit=1
                 )
                 if response.isError():
-                    self.label_consol.setText(self.label_consol.text() + "\n" + "Error writing")
+                    self.add_console_line("Error writing")
             else:
-                self.label_consol.setText(self.label_consol.text() + "\n" + "Not connected to any port")
+                self.add_console_line("Not connected to any port")
 
     def read_protection(self) -> None:
         """Read the protection and add them to the console"""
@@ -465,7 +442,7 @@ class MainWindow(QtWidgets.QMainWindow):
             6: "EVENT_T_MCU_MAX",
             7: "EVENT_T_HEATSINK_MAX",
         }
-        self.label_consol.setText(self.label_consol.text() + "\n" + dict_code_alarm[code_alarm])
+        self.add_console_line(dict_code_alarm[code_alarm])
 
     def set_code_warning(self, code_warning: int) -> None:
         """Set the code warning in message box"""
