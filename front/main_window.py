@@ -409,6 +409,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 3: 1009,
                 4: 1010,
                 5: 1011,
+                6: 2,
             }
             self.set_writing_hr(dict_col, self.table_hold_regi_2, row, col)
 
