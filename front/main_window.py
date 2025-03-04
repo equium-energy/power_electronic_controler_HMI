@@ -1,3 +1,4 @@
+import datetime
 import sys
 from typing import List
 from PySide6 import QtWidgets, QtCore, QtUiTools, QtGui
@@ -37,6 +38,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.customize_table()
         self.set_menu()
         self.set_style()
+        self.set_log()
 
     def set_menu(self) -> None:
         """Set the menu bar to add help section"""
@@ -58,6 +60,12 @@ class MainWindow(QtWidgets.QMainWindow):
         print(pixmap)
         msg_box.setIconPixmap(pixmap)
         msg_box.exec()
+
+    def set_log(self) -> None:
+        """Initialize the log with new date"""
+        new_entry = f"{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')} - New log entry"
+        with open("log.txt", "a") as file:
+            file.write(new_entry + "\n")
 
     def get_ui_element(self) -> None:
         """Access UI elements"""
@@ -223,6 +231,8 @@ class MainWindow(QtWidgets.QMainWindow):
         if len(self.log_lines) > 6:
             self.log_lines.pop(0)
         self.label_consol.setText("\n".join(self.log_lines))
+        with open("log.txt", "a") as file:
+            file.write(datetime.datetime.now().strftime('%H:%M:%S') + " - " + message + "\n")
 
     def poll_data(self) -> None:
         """Poll the data from input and golding registers"""
