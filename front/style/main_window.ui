@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>921</width>
-    <height>795</height>
+    <width>933</width>
+    <height>791</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
-      <width>901</width>
+      <y>0</y>
+      <width>912</width>
       <height>731</height>
      </rect>
     </property>
@@ -82,30 +82,37 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_conncet">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <property name="spacing">
+            <number>10</number>
            </property>
-           <property name="text">
-            <string>Connect</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_refresh">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Refresh</string>
-           </property>
-          </widget>
+           <item>
+            <widget class="QPushButton" name="pushButton_refresh">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Refresh</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_conncet">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Connect</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -332,11 +339,21 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_console">
-           <property name="text">
-            <string>Clean</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <item>
+            <widget class="QPushButton" name="pushButton_console">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Clean</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -362,6 +379,7 @@
            </property>
            <property name="font">
             <font>
+             <pointsize>11</pointsize>
              <underline>false</underline>
             </font>
            </property>
@@ -520,7 +538,7 @@
             <bool>true</bool>
            </attribute>
            <attribute name="horizontalHeaderDefaultSectionSize">
-            <number>120</number>
+            <number>113</number>
            </attribute>
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
@@ -546,6 +564,11 @@
              <string/>
             </property>
            </row>
+           <column>
+            <property name="text">
+             <string/>
+            </property>
+           </column>
            <column>
             <property name="text">
              <string/>
@@ -621,7 +644,7 @@
             <bool>false</bool>
            </attribute>
            <attribute name="horizontalHeaderDefaultSectionSize">
-            <number>120</number>
+            <number>113</number>
            </attribute>
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
@@ -647,6 +670,11 @@
              <string/>
             </property>
            </row>
+           <column>
+            <property name="text">
+             <string/>
+            </property>
+           </column>
            <column>
             <property name="text">
              <string/>
@@ -866,6 +894,7 @@
          </property>
          <property name="font">
           <font>
+           <pointsize>11</pointsize>
            <underline>false</underline>
           </font>
          </property>
@@ -1037,7 +1066,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>921</width>
+     <width>933</width>
      <height>33</height>
     </rect>
    </property>
