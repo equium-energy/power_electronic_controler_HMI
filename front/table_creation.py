@@ -38,15 +38,15 @@ def create_motor_table(table: QtWidgets.QTableWidget) -> None:
     table.setSpan(0, 1, 1, 3)
     table.setSpan(0, 1, 1, 3)
     table.setSpan(0, 4, 1, 2)
-    table.setSpan(0, 6, 1, 2)
+    table.setSpan(0, 6, 1, 3)
     # Set headers
     set_centered_item(table, 0, 0, QtWidgets.QTableWidgetItem("Live freq. [Hz]"))
     set_centered_item(table, 0, 1, QtWidgets.QTableWidgetItem("Position [mm]"))
     set_centered_item(table, 0, 4, QtWidgets.QTableWidgetItem("AC rms"))
     set_centered_item(table, 0, 6, QtWidgets.QTableWidgetItem("DC"))
     # Set second row labels (Min, Live, Max)
-    headers = ["min", "avg.", "max", "voltage [V]", "current [A]", "resistance [Ω]", "current [A]"]
-    for col in range(1, 8):
+    headers = ["min", "avg.", "max", "voltage [V]", "current [A]", "resistance [Ω]", "current [A]", "position [mm]"]
+    for col in range(1, len(headers)+1):
         set_centered_item(table, 1, col, QtWidgets.QTableWidgetItem(headers[col-1]))
     # Disable editing for the first three rows
     for row in range(3):

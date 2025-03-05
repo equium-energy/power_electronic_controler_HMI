@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>933</width>
+    <width>1063</width>
     <height>791</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>912</width>
+      <width>1025</width>
       <height>731</height>
      </rect>
     </property>
@@ -82,23 +82,7 @@
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <property name="spacing">
-            <number>10</number>
-           </property>
-           <item>
-            <widget class="QPushButton" name="pushButton_refresh">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Refresh</string>
-             </property>
-            </widget>
-           </item>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
             <widget class="QPushButton" name="pushButton_conncet">
              <property name="sizePolicy">
@@ -109,6 +93,19 @@
              </property>
              <property name="text">
               <string>Connect</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_refresh">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Refresh</string>
              </property>
             </widget>
            </item>
@@ -357,6 +354,9 @@
          </item>
         </layout>
        </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_6"/>
+       </item>
       </layout>
      </item>
      <item>
@@ -538,7 +538,7 @@
             <bool>true</bool>
            </attribute>
            <attribute name="horizontalHeaderDefaultSectionSize">
-            <number>113</number>
+            <number>102</number>
            </attribute>
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
@@ -564,6 +564,11 @@
              <string/>
             </property>
            </row>
+           <column>
+            <property name="text">
+             <string/>
+            </property>
+           </column>
            <column>
             <property name="text">
              <string/>
@@ -670,6 +675,11 @@
              <string/>
             </property>
            </row>
+           <column>
+            <property name="text">
+             <string/>
+            </property>
+           </column>
            <column>
             <property name="text">
              <string/>
@@ -1066,7 +1076,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>933</width>
+     <width>1063</width>
      <height>33</height>
     </rect>
    </property>
