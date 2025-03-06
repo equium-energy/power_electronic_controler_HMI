@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1063</width>
-    <height>791</height>
+    <height>803</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>0</y>
       <width>1025</width>
-      <height>731</height>
+      <height>761</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -325,7 +325,7 @@
          <item>
           <widget class="QLabel" name="label_console">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -355,7 +355,409 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_6"/>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QRadioButton" name="rB_evt_v_bus_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>EVENT_V_BUS_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_evt_v_bus_min">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>EVENT_V_BUS_MIN</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_evt_v_motor1_max">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>EVENT_V_MOTOR1_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_evt_v_motor2_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>EVENT_V_MOTOR2_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_evt_i_motor1_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>EVENT_I_MOTOR1_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_evt_i_motor2_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>EVENT_I_MOTOR2_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_evt_t_mcu_max">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>EVENT_T_MCU_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_evt_t_heatsink_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>EVENT_T_HEATSINK_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_evt_p_motor1_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>EVENT_P_MOTOR1_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_evt_p_motor1_max_2">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>EVENT_P_MOTOR2_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_evt_p_motor1_min">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>EVENT_P_MOTOR1_MIN</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_evt_p_motor2_min">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>EVENT_P_MOTOR2_MIN</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QRadioButton" name="rB_v_bus_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>V_BUS_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_v_bus_min">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>V_BUS_MIN</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_v_motor1_max">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>V_MOTOR1_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_v_motor2_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>V_MOTOR2_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_i_motor1_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>I_MOTOR1_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_i_motor2_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>I_MOTOR2_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_t_mcu_max">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>T_MCU_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_t_heatsink_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>T_HEATSINK_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_p_motor1_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>P_MOTOR1_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_p_motor2_max">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>P_MOTOR2_MAX</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_p_motor1_min">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>P_MOTOR1_MIN</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rB_p_motor2_min">
+             <property name="font">
+              <font>
+               <pointsize>6</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>P_MOTOR2_MIN</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
@@ -535,10 +937,10 @@
             <bool>false</bool>
            </attribute>
            <attribute name="horizontalHeaderCascadingSectionResizes">
-            <bool>true</bool>
+            <bool>false</bool>
            </attribute>
            <attribute name="horizontalHeaderDefaultSectionSize">
-            <number>102</number>
+            <number>113</number>
            </attribute>
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
@@ -564,11 +966,6 @@
              <string/>
             </property>
            </row>
-           <column>
-            <property name="text">
-             <string/>
-            </property>
-           </column>
            <column>
             <property name="text">
              <string/>
@@ -675,11 +1072,6 @@
              <string/>
             </property>
            </row>
-           <column>
-            <property name="text">
-             <string/>
-            </property>
-           </column>
            <column>
             <property name="text">
              <string/>

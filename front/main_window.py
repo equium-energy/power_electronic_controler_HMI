@@ -133,6 +133,34 @@ class MainWindow(QtWidgets.QMainWindow):
         self.menu_help: QtWidgets.QMenu = self.main_window.findChild(
             QtWidgets.QMenu, "menuHelp"
         )
+        self.radiobutton_evt: dict[str, QtWidgets.QRadioButton] = {
+            "rb_evt_v_bus_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_v_bus_max"),
+            "rb_evt_v_bus_min": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_v_bus_min"),
+            "rb_evt_v_motor1_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_v_motor1_max"),
+            "rb_evt_v_motor2_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_v_motor2_max"),
+            "rb_evt_i_motor1_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_i_motor1_max"),
+            "rb_evt_i_motor2_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_i_motor2_max"),
+            "rb_evt_t_mcu_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_t_mcu_max"),
+            "rb_evt_t_heatsink_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_t_heatsink_max"),
+            "rb_evt_p_motor1_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_p_motor1_max"),
+            "rb_evt_p_motor2_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_p_motor2_max"),
+            "rb_evt_p_motor1_min": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_p_motor1_min"),
+            "rb_evt_p_motor2_min": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_p_motor2_min"),
+        }
+        self.radiobutton_warn: dict[str, QtWidgets.QRadioButton] = {
+            "rb_v_bus_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_v_bus_max"),
+            "rb_v_bus_min": self.main_window.findChild(QtWidgets.QRadioButton, "rB_v_bus_min"),
+            "rb_v_motor1_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_v_motor1_max"),
+            "rb_v_motor2_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_v_motor2_max"),
+            "rb_i_motor1_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_i_motor1_max"),
+            "rb_i_motor2_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_i_motor2_max"),
+            "rb_t_mcu_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_t_mcu_max"),
+            "rb_t_heatsink_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_t_heatsink_max"),
+            "rb_p_motor1_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_p_motor1_max"),
+            "rb_p_motor2_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_p_motor2_max"),
+            "rb_p_motor1_min": self.main_window.findChild(QtWidgets.QRadioButton, "rB_p_motor1_min"),
+            "rb_p_motor2_min": self.main_window.findChild(QtWidgets.QRadioButton, "rB_p_motor2_min"),
+        }
 
     def customize_table(self) -> None:
         """Customize the Input and Holding register tables"""
@@ -436,34 +464,49 @@ class MainWindow(QtWidgets.QMainWindow):
         """Read the protection and add them to the console"""
         if self.modbus_client and self.modbus_client.is_socket_open():
             code_alarm = self.modbus_client.read_input_registers(100, 1, unit=1)
+            self.set_code_alarm(code_alarm.registers[0], False)
             if code_alarm:
-                self.set_code_alarm(code_alarm.registers[0])
-            code_warning = self.modbus_client.read_input_registers(101, 1, unit=1)
-            print(f"code warning {code_warning.registers[0]}")
+                self.set_code_alarm(code_alarm.registers[0], True)
 
-    def set_code_alarm(self, code_alarm: int) -> None:
+            code_warning = self.modbus_client.read_input_registers(101, 1, unit=1)
+            self.set_code_alarm(code_warning.registers[0], False)
+            if code_warning:
+                self.set_code_alarm(code_warning.registers[0], True)
+
+    def set_code_alarm(self, code_alarm: int, is_true: bool) -> None:
         """Set the code alarm"""
         dict_code_alarm = {
-            0: "EVENT_V_BUS_MAX",
-            1: "EVENT_V_BUS_MIN",
-            2: "EVENT_V_MOTOR1_MAX",
-            3: "EVENT_V_MOTOR2_MAX",
-            4: "EVENT_I_MOTOR1_MAX",
-            5: "EVENT_I_MOTOR2_MAX",
-            6: "EVENT_T_MCU_MAX",
-            7: "EVENT_T_HEATSINK_MAX",
+            0: "rb_evt_v_bus_max",
+            1: "rb_evt_v_bus_min",
+            2: "rb_evt_v_motor1_max",
+            3: "rb_evt_v_motor2_max",
+            4: "rb_evt_i_motor1_max",
+            5: "rb_evt_i_motor2_max",
+            6: "rb_evt_t_mcu_max",
+            7: "rb_evt_t_heatsink_max",
+            8: "rb_evt_p_motor1_max",
+            9: "rb_evt_p_motor2_max",
+            10: "rb_evt_p_motor1_min",
+            11: "rb_evt_p_motor2_min",
         }
-        self.add_console_line(dict_code_alarm[code_alarm])
+        name_code_alarm = dict_code_alarm[code_alarm]
+        self.radiobutton_evt[name_code_alarm].setChecked(is_true)
 
-    def set_code_warning(self, code_warning: int) -> None:
+    def set_code_warning(self, code_warning: int, is_true: bool) -> None:
         """Set the code warning in message box"""
-        dict_code_alarm = {
-            0: "V_BUS_MAX",
-            1: "V_BUS_MIN",
-            2: "V_MOTOR1_MAX",
-            3: "V_MOTOR2_MAX",
-            4: "I_MOTOR1_MAX",
-            5: "I_MOTOR2_MAX",
-            6: "T_MCU_MAX",
-            7: "T_HEATSINK_MAX",
+        dict_code_warning = {
+            0: "rb_v_bus_max",
+            1: "rb_v_bus_min",
+            2: "rb_v_motor1_max",
+            3: "rb_v_motor2_max",
+            4: "rb_i_motor1_max",
+            5: "rb_i_motor2_max",
+            6: "rb_t_mcu_max",
+            7: "rb_t_heatsink_max",
+            8: "rb_p_motor1_max",
+            9: "rb_p_motor2_max",
+            10: "rb_p_motor1_min",
+            11: "rb_p_motor2_min",
         }
+        name_code_alarm = dict_code_warning[code_warning]
+        self.radiobutton_warn[name_code_alarm].setChecked(is_true)
