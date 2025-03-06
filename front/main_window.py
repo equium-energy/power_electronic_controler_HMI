@@ -1,9 +1,6 @@
 import datetime
-import os
-import sys
 from typing import List
 from PySide6 import QtWidgets, QtCore, QtUiTools, QtGui
-from PySide6.QtWidgets import QApplication
 import threading
 import time
 
@@ -12,7 +9,14 @@ from front.common_fct import refresh_ports
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 import pymodbus
 
-from front.table_creation import create_temp_table, create_motor_table, create_pow_table, create_other_table, create_holding_1, create_holding_2
+from front.table_creation import (
+    create_temp_table,
+    create_motor_table,
+    create_pow_table,
+    create_other_table,
+    create_holding_1,
+    create_holding_2,
+)
 
 time_between_frame = 0.05
 
@@ -49,7 +53,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_style(self) -> None:
         """Set the style of the main window"""
-        with open('./front/style/style.css') as f:
+        with open("./front/style/style.css") as f:
             css_file = f.read()
         self.setStyleSheet(css_file)
 
@@ -57,14 +61,18 @@ class MainWindow(QtWidgets.QMainWindow):
         msg_box = QtWidgets.QMessageBox(self)
         msg_box.setWindowTitle("pack ML")
         # Load and set an image
-        pixmap = QtGui.QPixmap("./front/style/pack_ml.jpg")  # Replace with your image path
+        pixmap = QtGui.QPixmap(
+            "./front/style/pack_ml.jpg"
+        )  # Replace with your image path
         print(pixmap)
         msg_box.setIconPixmap(pixmap)
         msg_box.exec()
 
     def set_log(self) -> None:
         """Initialize the log with new date"""
-        new_entry = f"{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')} - New log entry"
+        new_entry = (
+            f"{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')} - New log entry"
+        )
         with open("log.txt", "a") as file:
             file.write(new_entry + "\n")
 
@@ -134,32 +142,80 @@ class MainWindow(QtWidgets.QMainWindow):
             QtWidgets.QMenu, "menuHelp"
         )
         self.radiobutton_evt: dict[str, QtWidgets.QRadioButton] = {
-            "rb_evt_v_bus_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_v_bus_max"),
-            "rb_evt_v_bus_min": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_v_bus_min"),
-            "rb_evt_v_motor1_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_v_motor1_max"),
-            "rb_evt_v_motor2_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_v_motor2_max"),
-            "rb_evt_i_motor1_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_i_motor1_max"),
-            "rb_evt_i_motor2_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_i_motor2_max"),
-            "rb_evt_t_mcu_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_t_mcu_max"),
-            "rb_evt_t_heatsink_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_t_heatsink_max"),
-            "rb_evt_p_motor1_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_p_motor1_max"),
-            "rb_evt_p_motor2_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_p_motor2_max"),
-            "rb_evt_p_motor1_min": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_p_motor1_min"),
-            "rb_evt_p_motor2_min": self.main_window.findChild(QtWidgets.QRadioButton, "rB_evt_p_motor2_min"),
+            "rb_evt_v_bus_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_evt_v_bus_max"
+            ),
+            "rb_evt_v_bus_min": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_evt_v_bus_min"
+            ),
+            "rb_evt_v_motor1_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_evt_v_motor1_max"
+            ),
+            "rb_evt_v_motor2_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_evt_v_motor2_max"
+            ),
+            "rb_evt_i_motor1_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_evt_i_motor1_max"
+            ),
+            "rb_evt_i_motor2_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_evt_i_motor2_max"
+            ),
+            "rb_evt_t_mcu_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_evt_t_mcu_max"
+            ),
+            "rb_evt_t_heatsink_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_evt_t_heatsink_max"
+            ),
+            "rb_evt_p_motor1_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_evt_p_motor1_max"
+            ),
+            "rb_evt_p_motor2_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_evt_p_motor2_max"
+            ),
+            "rb_evt_p_motor1_min": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_evt_p_motor1_min"
+            ),
+            "rb_evt_p_motor2_min": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_evt_p_motor2_min"
+            ),
         }
         self.radiobutton_warn: dict[str, QtWidgets.QRadioButton] = {
-            "rb_v_bus_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_v_bus_max"),
-            "rb_v_bus_min": self.main_window.findChild(QtWidgets.QRadioButton, "rB_v_bus_min"),
-            "rb_v_motor1_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_v_motor1_max"),
-            "rb_v_motor2_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_v_motor2_max"),
-            "rb_i_motor1_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_i_motor1_max"),
-            "rb_i_motor2_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_i_motor2_max"),
-            "rb_t_mcu_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_t_mcu_max"),
-            "rb_t_heatsink_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_t_heatsink_max"),
-            "rb_p_motor1_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_p_motor1_max"),
-            "rb_p_motor2_max": self.main_window.findChild(QtWidgets.QRadioButton, "rB_p_motor2_max"),
-            "rb_p_motor1_min": self.main_window.findChild(QtWidgets.QRadioButton, "rB_p_motor1_min"),
-            "rb_p_motor2_min": self.main_window.findChild(QtWidgets.QRadioButton, "rB_p_motor2_min"),
+            "rb_v_bus_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_v_bus_max"
+            ),
+            "rb_v_bus_min": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_v_bus_min"
+            ),
+            "rb_v_motor1_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_v_motor1_max"
+            ),
+            "rb_v_motor2_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_v_motor2_max"
+            ),
+            "rb_i_motor1_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_i_motor1_max"
+            ),
+            "rb_i_motor2_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_i_motor2_max"
+            ),
+            "rb_t_mcu_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_t_mcu_max"
+            ),
+            "rb_t_heatsink_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_t_heatsink_max"
+            ),
+            "rb_p_motor1_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_p_motor1_max"
+            ),
+            "rb_p_motor2_max": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_p_motor2_max"
+            ),
+            "rb_p_motor1_min": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_p_motor1_min"
+            ),
+            "rb_p_motor2_min": self.main_window.findChild(
+                QtWidgets.QRadioButton, "rB_p_motor2_min"
+            ),
         }
 
     def customize_table(self) -> None:
@@ -174,7 +230,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_column_size(self.table_hold_regi_2, {0: 120, 2: 80, 6: 85})
         # INPUT
         create_temp_table(self.table_temp)
-        self.set_column_size(self.table_temp, {0: 80, 1: 80, 2: 80, 3: 80, 4: 80,5: 80, 6: 80})
+        self.set_column_size(
+            self.table_temp, {0: 80, 1: 80, 2: 80, 3: 80, 4: 80, 5: 80, 6: 80}
+        )
         create_motor_table(self.table_motor1)
         create_motor_table(self.table_motor2)
         create_pow_table(self.table_power)
@@ -190,7 +248,9 @@ class MainWindow(QtWidgets.QMainWindow):
         for x, y in col_size.items():
             table.setColumnWidth(x, y)
 
-    def set_row_size(self, table: QtWidgets.QTableWidget, row_size: dict[int, int]) -> None:
+    def set_row_size(
+        self, table: QtWidgets.QTableWidget, row_size: dict[int, int]
+    ) -> None:
         """Define the row height of a table"""
         for x, y in row_size.items():
             table.setRowHeight(x, y)
@@ -260,7 +320,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.log_lines.pop(0)
         self.label_consol.setText("\n".join(self.log_lines))
         with open("log.txt", "a") as file:
-            file.write(datetime.datetime.now().strftime('%H:%M:%S') + " - " + message + "\n")
+            file.write(
+                datetime.datetime.now().strftime("%H:%M:%S") + " - " + message + "\n"
+            )
 
     def poll_data(self) -> None:
         """Poll the data from input and golding registers"""
@@ -312,7 +374,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.label_consol.clear()
         self.log_lines = []
 
-
     def send_command(self, command: int):
         if self.modbus_client and self.modbus_client.is_socket_open():
             try:
@@ -320,7 +381,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 if not response.isError():
                     self.add_console_line(f"Command {command} sent successfully")
                 else:
-                    self.add_console_line(f"Error sending command {command}: {response}")
+                    self.add_console_line(
+                        f"Error sending command {command}: {response}"
+                    )
             except pymodbus.exceptions.ModbusException as e:
                 self.add_console_line(f"Modbus Exception: {e}")
             except Exception as e:
@@ -441,13 +504,19 @@ class MainWindow(QtWidgets.QMainWindow):
             }
             self.set_writing_hr(dict_col, self.table_hold_regi_2, row, col)
 
-    def set_writing_hr(self, dict_col: dict[int, int], table: QtWidgets.QTableWidget, row: int, col: int) -> None:
+    def set_writing_hr(
+        self,
+        dict_col: dict[int, int],
+        table: QtWidgets.QTableWidget,
+        row: int,
+        col: int,
+    ) -> None:
         """Write holding registers in the write table"""
         if row == 3:
             if self.modbus_client and self.modbus_client.is_socket_open():
                 try:
                     value = int(table.item(row, col).text())
-                except:
+                except ValueError:
                     self.add_console_line("Invalid input")
                     return
                 value_to_write = value * 10
@@ -493,7 +562,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.radiobutton_evt[name_code_alarm].setChecked(is_true)
 
     def set_code_warning(self, code_warning: int, is_true: bool) -> None:
-        """Set the code warning in message box"""
+        """Set the code warning"""
         dict_code_warning = {
             0: "rb_v_bus_max",
             1: "rb_v_bus_min",
