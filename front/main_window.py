@@ -1,4 +1,5 @@
 import datetime
+import os
 import sys
 from typing import List
 from PySide6 import QtWidgets, QtCore, QtUiTools, QtGui
@@ -227,7 +228,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def add_console_line(self, message: str) -> None:
         """Add message in the line and erase the other ones"""
         self.log_lines.append(message)
-        print(f"message test {self.log_lines} length {len(self.log_lines)}")
         if len(self.log_lines) > 6:
             self.log_lines.pop(0)
         self.label_consol.setText("\n".join(self.log_lines))
@@ -304,8 +304,8 @@ class MainWindow(QtWidgets.QMainWindow):
         """Read the input registers to write them in the corresponding table"""
         table_data = {
             self.table_temp: [10, 19, 20, 9, 17, 29],
-            self.table_motor1: [3, 11, 13, 12, 5, 7, 26, 29, 11],
-            self.table_motor2: [18, 14, 16, 15, 6, 8, 27, 30, 14],
+            self.table_motor1: [3, 11, 13, 12, 5, 7, 26, 29],
+            self.table_motor2: [18, 14, 16, 15, 6, 8, 27, 30],
             self.table_power: [21, 22],
             self.table_other: [4, 20, 28],
         }
