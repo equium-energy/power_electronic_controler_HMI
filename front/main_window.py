@@ -5,6 +5,7 @@ from PySide6 import QtWidgets, QtCore, QtUiTools, QtGui
 import threading
 import time
 
+import numpy as np
 import pymodbus.exceptions
 from front.common_fct import refresh_ports
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
@@ -520,7 +521,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if row == 3:
             if self.modbus_client and self.modbus_client.is_socket_open():
                 try:
-                    value = float(table.item(row, col).text())
+                    value = np.uint16(table.item(row, col).text())
                 except ValueError:
                     self.add_console_line("Invalid input")
                     return
@@ -530,7 +531,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 if register in [1007, 1008]:
                     value_to_write = self.int16_to_uint16(value_to_write)
                 response = self.modbus_client.write_register(
-                    dict_col[col], value_to_write, unit=1
+                    register, value_to_write, unit=1
                 )
                 if response.isError():
                     self.add_console_line("Error writing")
