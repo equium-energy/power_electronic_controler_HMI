@@ -1,3 +1,4 @@
+import ctypes
 import datetime
 from typing import List
 from PySide6 import QtWidgets, QtCore, QtUiTools, QtGui
@@ -477,6 +478,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.disable_row(table, 0)
         time.sleep(time_between_frame)
 
+    def int16_to_uint16(self, value: float) -> float:
+        """Convert value from int16 to uint16"""
+        return ctypes.c_uint16(ctypes.c_int16(value).value).value
+
     def write_holding_register1(self, row: int, col: int) -> None:
         """Write and send the holding resgister"""
         if row != 0:
@@ -515,12 +520,15 @@ class MainWindow(QtWidgets.QMainWindow):
         if row == 3:
             if self.modbus_client and self.modbus_client.is_socket_open():
                 try:
-                    value = int(table.item(row, col).text())
+                    value = float(table.item(row, col).text())
                 except ValueError:
                     self.add_console_line("Invalid input")
                     return
                 value_to_write = value * 10
                 time.sleep(time_between_frame)
+                register = dict_col[col]
+                if register in [1007, 1008]:
+                    value_to_write = self.int16_to_uint16(value_to_write)
                 response = self.modbus_client.write_register(
                     dict_col[col], value_to_write, unit=1
                 )
