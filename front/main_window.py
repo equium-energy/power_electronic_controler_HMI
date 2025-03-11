@@ -1,5 +1,6 @@
 import ctypes
 import datetime
+import struct
 from typing import List
 from PySide6 import QtWidgets, QtCore, QtUiTools, QtGui
 import threading
@@ -397,8 +398,8 @@ class MainWindow(QtWidgets.QMainWindow):
         """Read the input registers to write them in the corresponding table"""
         table_data = {
             self.table_temp: [10, 19, 20, 9, 17, 29],
-            self.table_motor1: [3, 11, 13, 12, 5, 7, 26, 29],
-            self.table_motor2: [18, 14, 16, 15, 6, 8, 27, 30],
+            self.table_motor1: [3, 13, 11, 12, 5, 7, 26, 29],
+            self.table_motor2: [18, 16, 14, 15, 6, 8, 27, 30],
             self.table_power: [21, 22],
             self.table_other: [4, 20, 28],
         }
@@ -425,7 +426,16 @@ class MainWindow(QtWidgets.QMainWindow):
                 gain = 100
             input_reg = self.modbus_client.read_input_registers(idx, 1, unit=1)
             if not input_reg.isError():
-                val_for_table = str(input_reg.registers[0] / gain)
+                uint16_value = input_reg.registers[0]
+                binary_value = struct.pack('>H', uint16_value)
+                print(f"ici {uint16_value}")
+                if idx in [9,17,29,10,19,20,11,12,13,14,15,16]:
+                    float_value = struct.unpack('>h', binary_value)[0]
+                else:
+                    float_value = float(int.from_bytes(binary_value, byteorder='big'))
+                print(f"binary: {binary_value}, to {int.from_bytes(binary_value, byteorder='big')}")
+                print(float_value)
+                val_for_table = str(float_value / gain)
                 table.setItem(2, i, QtWidgets.QTableWidgetItem(val_for_table))
                 time.sleep(time_between_frame)
             else:
