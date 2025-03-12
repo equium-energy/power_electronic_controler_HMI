@@ -23,6 +23,10 @@ from front.table_creation import (
 
 time_between_frame = 0.05
 
+HOLDING_REG_1 = [3, 4, 5, 6, 7, 8]
+
+HOLDING_REG_2 = [9, 10, 2, 11, 12, 13, 1]
+
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -427,14 +431,11 @@ class MainWindow(QtWidgets.QMainWindow):
             input_reg = self.modbus_client.read_input_registers(idx, 1, unit=1)
             if not input_reg.isError():
                 uint16_value = input_reg.registers[0]
-                binary_value = struct.pack('>H', uint16_value)
-                print(f"ici {uint16_value}")
-                if idx in [9,17,29,10,19,20,11,12,13,14,15,16]:
-                    float_value = struct.unpack('>h', binary_value)[0]
+                binary_value = struct.pack(">H", uint16_value)
+                if idx in [9, 17, 29, 10, 19, 20, 11, 12, 13, 14, 15, 16]:
+                    float_value = struct.unpack(">h", binary_value)[0]
                 else:
-                    float_value = float(int.from_bytes(binary_value, byteorder='big'))
-                print(f"binary: {binary_value}, to {int.from_bytes(binary_value, byteorder='big')}")
-                print(float_value)
+                    float_value = float(int.from_bytes(binary_value, byteorder="big"))
                 val_for_table = str(float_value / gain)
                 table.setItem(2, i, QtWidgets.QTableWidgetItem(val_for_table))
                 time.sleep(time_between_frame)
@@ -468,9 +469,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def read_holding_registers(self) -> None:
         """Read the holding register"""
-        list_reg1 = [1001, 1002, 1003, 1004, 1005, 1006]
+        list_reg1 = HOLDING_REG_1
         self.set_holding_registers(list_reg1, self.table_hold_regi_1)
-        list_reg2 = [1007, 1008, 1000, 1009, 1010, 1011, 2]
+        list_reg2 = HOLDING_REG_2
         self.set_holding_registers(list_reg2, self.table_hold_regi_2)
 
     def set_holding_registers(
@@ -496,28 +497,13 @@ class MainWindow(QtWidgets.QMainWindow):
     def write_holding_register1(self, row: int, col: int) -> None:
         """Write and send the holding resgister"""
         if row != 0:
-            dict_col = {
-                0: 1001,
-                1: 1002,
-                2: 1003,
-                3: 1004,
-                4: 1005,
-                5: 1006,
-            }
+            dict_col = {i: val for i, val in enumerate(HOLDING_REG_1)}
             self.set_writing_hr(dict_col, self.table_hold_regi_1, row, col)
 
     def write_holding_register2(self, row: int, col: int) -> None:
         """Write and send the holding resgister"""
         if row != 0:
-            dict_col = {
-                0: 1007,
-                1: 1008,
-                2: 1000,
-                3: 1009,
-                4: 1010,
-                5: 1011,
-                6: 2,
-            }
+            dict_col = {i: val for i, val in enumerate(HOLDING_REG_2)}
             self.set_writing_hr(dict_col, self.table_hold_regi_2, row, col)
 
     def set_writing_hr(
@@ -538,7 +524,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 value_to_write = value * 10
                 time.sleep(time_between_frame)
                 register = dict_col[col]
-                if register in [1007, 1008]:
+                if register in [9, 10]:
                     value_to_write = self.int16_to_uint16(value_to_write)
                 response = self.modbus_client.write_register(
                     register, value_to_write, unit=1
