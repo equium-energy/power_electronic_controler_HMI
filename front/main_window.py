@@ -27,6 +27,16 @@ HOLDING_REG_1 = [3, 4, 5, 6, 7, 8]
 
 HOLDING_REG_2 = [9, 10, 2, 11, 12, 13, 1]
 
+INPUT_REGISTER = {
+    "temp": [17, 0, 0, 16, 0, 0],
+    "table_motor1": [7, 20, 18, 19, 10, 12, 0, 14],
+    "table_motor2": [8, 23, 21, 22, 11, 13, 0, 15],
+    "table_power": [0, 0],
+    "table_other": [9, 0, 0],
+}
+
+INT16_INPUT_REGISTER = [16, 17, 18, 19, 20, 21, 22, 23]
+
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -401,12 +411,13 @@ class MainWindow(QtWidgets.QMainWindow):
     def read_input_register(self) -> None:
         """Read the input registers to write them in the corresponding table"""
         table_data = {
-            self.table_temp: [10, 19, 20, 9, 17, 29],
-            self.table_motor1: [3, 13, 11, 12, 5, 7, 26, 29],
-            self.table_motor2: [18, 16, 14, 15, 6, 8, 27, 30],
-            self.table_power: [21, 22],
-            self.table_other: [4, 20, 28],
+            self.table_temp: INPUT_REGISTER["temp"],
+            self.table_motor1: INPUT_REGISTER["table_motor1"],
+            self.table_motor2: INPUT_REGISTER["table_motor2"],
+            self.table_power: INPUT_REGISTER["table_power"],
+            self.table_other: INPUT_REGISTER["table_other"],
         }
+        ##ici
 
         # Iterate over the dictionary and set table values
         for table, values in table_data.items():
@@ -432,7 +443,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if not input_reg.isError():
                 uint16_value = input_reg.registers[0]
                 binary_value = struct.pack(">H", uint16_value)
-                if idx in [9, 17, 29, 10, 19, 20, 11, 12, 13, 14, 15, 16]:
+                if idx in INT16_INPUT_REGISTER:
                     float_value = struct.unpack(">h", binary_value)[0]
                 else:
                     float_value = float(int.from_bytes(binary_value, byteorder="big"))
@@ -469,10 +480,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def read_holding_registers(self) -> None:
         """Read the holding register"""
-        list_reg1 = HOLDING_REG_1
-        self.set_holding_registers(list_reg1, self.table_hold_regi_1)
-        list_reg2 = HOLDING_REG_2
-        self.set_holding_registers(list_reg2, self.table_hold_regi_2)
+        self.set_holding_registers(HOLDING_REG_1, self.table_hold_regi_1)
+        self.set_holding_registers(HOLDING_REG_2, self.table_hold_regi_2)
 
     def set_holding_registers(
         self, list_reg: List[int], table: QtWidgets.QTableWidget
