@@ -21,7 +21,7 @@ from front.table_creation import (
     create_holding_2,
 )
 
-time_between_frame = 0.05
+TIME_BTW_FRAME = 0.05
 
 HOLDING_REG_1 = [3, 4, 5, 6, 7, 8]
 
@@ -335,9 +335,9 @@ class MainWindow(QtWidgets.QMainWindow):
         """Poll the data from input and golding registers"""
         while self.polling:
             try:
-                time.sleep(time_between_frame)
+                time.sleep(TIME_BTW_FRAME)
                 self.read_input_register()
-                time.sleep(time_between_frame)
+                time.sleep(TIME_BTW_FRAME)
                 self.read_holding_registers()
                 self.read_protection()
             except Exception as e:
@@ -438,10 +438,10 @@ class MainWindow(QtWidgets.QMainWindow):
                     float_value = float(int.from_bytes(binary_value, byteorder="big"))
                 val_for_table = str(float_value / gain)
                 table.setItem(2, i, QtWidgets.QTableWidgetItem(val_for_table))
-                time.sleep(time_between_frame)
+                time.sleep(TIME_BTW_FRAME)
             else:
                 table.setItem(2, i, QtWidgets.QTableWidgetItem("Error"))
-        time.sleep(time_between_frame)
+        time.sleep(TIME_BTW_FRAME)
 
     def convert_motor_status(self, status_code) -> dict[int, str]:
         """Get the str motor status based on its input response"""
@@ -486,9 +486,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 table.setItem(2, i, QtWidgets.QTableWidgetItem(holding_reg_frq))
             else:
                 table.setItem(2, i, QtWidgets.QTableWidgetItem("Error"))
-            time.sleep(time_between_frame)
+            time.sleep(TIME_BTW_FRAME)
         self.disable_row(table, 0)
-        time.sleep(time_between_frame)
+        time.sleep(TIME_BTW_FRAME)
 
     def int16_to_uint16(self, value: float) -> float:
         """Convert value from int16 to uint16"""
@@ -522,7 +522,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.add_console_line("Invalid input")
                     return
                 value_to_write = value * 10
-                time.sleep(time_between_frame)
+                time.sleep(TIME_BTW_FRAME)
                 register = dict_col[col]
                 if register in [9, 10]:
                     value_to_write = self.int16_to_uint16(value_to_write)
