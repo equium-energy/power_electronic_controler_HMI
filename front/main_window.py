@@ -33,7 +33,9 @@ INPUT_REGISTER = {
     "table_motor2": [8, 23, 21, 22, 11, 13, 0, 15],
     "table_power": [0, 0],
     "table_other": [9, 0, 0],
-}
+    "code_alarm": 2,
+    "code_warning": 3,
+    }
 
 INT16_INPUT_REGISTER = [16, 17, 18, 19, 20, 21, 22, 23]
 
@@ -546,12 +548,12 @@ class MainWindow(QtWidgets.QMainWindow):
     def read_protection(self) -> None:
         """Read the protection and add them to the console"""
         if self.modbus_client and self.modbus_client.is_socket_open():
-            code_alarm = self.modbus_client.read_input_registers(100, 1, unit=1)
+            code_alarm = self.modbus_client.read_input_registers(INPUT_REGISTER["code_alarm"], 1, unit=1)
             self.set_code_alarm(code_alarm.registers[0], False)
             if code_alarm:
                 self.set_code_alarm(code_alarm.registers[0], True)
 
-            code_warning = self.modbus_client.read_input_registers(101, 1, unit=1)
+            code_warning = self.modbus_client.read_input_registers(INPUT_REGISTER["code_warning"], 1, unit=1)
             self.set_code_alarm(code_warning.registers[0], False)
             if code_warning:
                 self.set_code_alarm(code_warning.registers[0], True)
