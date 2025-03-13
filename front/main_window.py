@@ -423,7 +423,7 @@ class MainWindow(QtWidgets.QMainWindow):
         for table, values in table_data.items():
             self.set_table_value(values, table)
 
-        motor_status = self.modbus_client.read_input_registers(0, 1, unit=1)
+        motor_status = self.modbus_client.read_input_registers(4, 1, unit=1)
         if not motor_status.isError():
             motor_status_value = motor_status.registers[0]
             motor_status_text = self.convert_motor_status(motor_status_value)
