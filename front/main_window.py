@@ -354,7 +354,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.read_protection()
             except Exception as e:
                 self.add_console_line(f"Failed to read data: {e}")
-                self.polling = False
+                # self.polling = False
 
     def start_cmd(self) -> None:
         """Start button signal"""
